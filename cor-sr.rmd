@@ -1,0 +1,70 @@
+---
+title: "cor-SR"
+author: "sr"
+output: pdf_document
+---
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+```
+1. load data
+tried load the original xls, didn't work, don't know why. 
+saved the last worksheet to an independent xlsx
+```{r}
+baseDF <- read_excel("./data/Book1.xlsx")
+```
+2. basic cleaning
+```{r}
+#only work on my varialbes
+srDF <- select(baseDF, Ward, Borough, `Unemployment rate 2009`:`Crime rate - 2013`, `GCSE point scores - 2009`:`% dependent children in out-of-work households - 2013`)
+#drop the NA row
+srDF <- srDF[-1,]
+#drop last few rows with words
+nrows <- dim(srDF)[1]
+srDF <- srDF[1:(nrows-4),]
+srDF[,3:27] <- sapply(srDF[3:27],as.numeric)
+#calculate avg across years
+avg_names <- c("avg_unemployment", "avg_crime","avg_GCSE", "avg_schoolAbsence", "avg_dependentChild")
+for (i in 0:4) {
+  srDF[,avg_names[i+1]] <- rowMeans(srDF[,(i*5+3):(i*5+7)])
+}
+```
+3. calculate correlation
+```{r}
+corMat <- data.frame(cor(srDF[,28:32]))
+corMat
+```
+findings:
+1. crime shows moderate correlation with other 4 variables (why? need split down & find evidence)
+2. other 4 show high correlation in between
+try with log:
+more significant improvement
+```{r}
+corMatLog <- data.frame(cor(log10(srDF[,28:32])))
+corMatLog
+```
+4. plotting
+univariable:
+
+```{r}
+ggplot(srDF,aes(x=avg_crime))+geom_histogram()
+```
+crime rate with positive skewness (in which case log transformation makes sense)
+```{r}
+ggplot(srDF,aes(x=avg_GCSE,y=avg_crime))+geom_point()
+ggplot(srDF,aes(x=avg_schoolAbsence,y=avg_crime))+geom_point()
+ggplot(srDF,aes(x=avg_unemployment,y=avg_crime))+geom_point()
+ggplot(srDF,aes(x=avg_dependentChild,y=avg_crime))+geom_point()
+ggplot(srDF,aes(x=avg_GCSE,y=avg_crime))+geom_point()+scale_x_log10() + scale_y_log10()
+ggplot(srDF,aes(x=avg_schoolAbsence,y=avg_crime))+geom_point()+scale_x_log10() + scale_y_log10()
+ggplot(srDF,aes(x=avg_unemployment,y=avg_crime))+geom_point()+scale_x_log10() + scale_y_log10()
+ggplot(srDF,aes(x=avg_dependentChild,y=avg_crime))+geom_point()+scale_x_log10() + scale_y_log10()
+```
+plots with log transformation looks nicer
+
+5. for discussion
+a. do we need to dig deeper on why other variables are not HIGHLY correlated with crime rate? (e.g. split down by type of crimes, divide boroughs into groups) => takes time, may not find good answer
+b. do we do log transformation? I think necessary for regression part
+
