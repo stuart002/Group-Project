@@ -1,0 +1,100 @@
+---
+title: "Crime rate by borough"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+
+## Overview of crime rate by borough in London (2009 - 2013)
+
+From 2009 to 2013, the crime rates of all boroughs in London have decreased. As seen in the maps of figure x, the boroughs in the outskirts of London seem to have a lower crime rate than the boroughs in the center of London with exception to the City of London. 
+
+```{r london_maps_by_borough, message=FALSE, warning=FALSE, results='hide',echo=FALSE}
+library(rgdal)
+library(dplyr)
+library(plyr)
+library(ggplot2)
+library(rgeos)
+library(tidyr)
+
+#reads the full data
+well_being_index_data <- read.csv("london-ward-well-being-probability-scores-data.csv")
+
+#selects relevant columns: borough (4) and all crime levels (25:29) and stores in crime_data. Note boroughs are repeated because data is for wards
+crime_data <- well_being_index_data[c(2:661),c(4,25:29)]
+crime_data$Crime.rate...2009 <- as.numeric(as.character(crime_data$Crime.rate...2009))
+
+#adds new column names to crime_data
+colnames(crime_data) <- c("borough", "crime_rate_2009", "crime_rate_2010", "crime_rate_2011","crime_rate_2012","crime_rate_2013")
+
+#calculates the average crime level data per year for each borough
+crime_data_borough_averages <- aggregate(crime_data[, 2:6], list(crime_data$borough), mean)
+
+
+#sets new column names
+colnames(crime_data_borough_averages) <- c("borough", "crime_rate_2009", "crime_rate_2010", "crime_rate_2011","crime_rate_2012","crime_rate_2013")
+
+#calculates the growth of crime per borough
+growth <- (crime_data_borough_averages$crime_rate_2013 - crime_data_borough_averages$crime_rate_2009)/crime_data_borough_averages$crime_rate_2009*100
+
+crime_data_borough_averages$growth <- growth
+
+#Reads boroughs data as SpatialPolygonsDataFrame
+london_boroughs <- readOGR(dsn = "LondonBoroughs.shp") 
+
+#the line belows does the same as the merging 
+london_boroughs@data <- left_join(london_boroughs@data, crime_data_borough_averages, by = c('name' = 'borough'))
+
+
+london_boroughs_f <- fortify(london_boroughs)
+london_boroughs$id <- row.names(london_boroughs)# allocate an id variable to the sp d
+london_boroughs_f <- left_join(london_boroughs_f, london_boroughs@data) # join the data
+
+
+#changes the structure of the dataset to be able to plot it to a graph
+london_boroughs_f_long <- gather(london_boroughs_f, crime_rate_year, crime_rate, -long, -lat, -order, -hole,-piece,-id,-group,-ons_label,-name,-Partic_Per,-Pop_2001, -PopDensity, -AREA, -PERIMETER, -PopDen, -growth)
+
+ggplot(data = london_boroughs_f_long, # the input data
+       aes(x = long, y = lat, fill = crime_rate, group = group)) + # define variables
+  geom_polygon() + # plot the boroughs
+  geom_path(colour="white", lwd=0.05) + # borough borders
+  coord_equal() + # fixed x and y scales
+  facet_wrap(~ crime_rate_year) + # one plot per year
+  scale_fill_gradient2(low = "#64B5F6",high = "#2196F3", # colors
+                        name = "Crime rate") + # legend options
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+
+```
+City of London, remains with the lowest rate of crime across all boroughs with only 14 offences per 1000 daytime inhabitants in 2013. In contrast, its neighbouring boroughs as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 93). These boroughs are mainly located to the upper and lower side from the east of the City of London. 
+
+```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE}
+#plots the boroughs with highest crime rate of 100
+ggplot(london_boroughs_f, aes(long, lat, group = group, fill=crime_rate_2013>93)) +
+  geom_polygon() + geom_path(colour="white", lwd=0.05) + coord_equal() +
+  labs(x = "lat", y = "lon",
+       fill = "Crime rate > 100") +
+  scale_fill_manual(values=c("#BDBDBD","#2196F3")) +
+  ggtitle("Crime rate > 93 (2013) ") +
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+```
+On average, boroughs have lowered their crime rates to 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rates are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
+
+```{r crime_rate_growth, message=FALSE, warning=FALSE, results='hide',echo=FALSE}
+ggplot(data = london_boroughs_f, # the input data
+       aes(x = long, y = lat, fill = growth, group = group)) + # define variables
+  geom_polygon() + # plot the boroughs
+  geom_path(colour="white", lwd=0.05) + # borough borders
+  coord_equal() + # fixed x and y scales
+  scale_fill_gradient2(low = "#66BB6A",high = "#4CAF50", # colors
+                        name = "Crime rate growth (%)") + # legend options
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+```
+
