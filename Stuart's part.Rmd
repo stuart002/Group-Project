@@ -1,0 +1,68 @@
+---
+title: "Stuart's Part"
+output: html_notebook
+---
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+```
+1. load data
+tried load the original xls, didn't work, don't know why. 
+saved the last worksheet to an independent xlsx
+```{r}
+DF1 <- read_excel("./Book1.xlsx")
+```
+2. basic cleaning
+```{r}
+#read all the names of columns
+DF2 <- select(DF1, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
+#try to combine columns but found error: NA/NaN argument
+#try to remove row containing NA
+DF2 <-DF2[-1,]
+DF2 <-DF2[1:(nrow(DF2)-4),]
+#try to combine columns but found error: non-numeric argument to binary operator
+#try to convert columns into numeric
+DF2[,3:18] <- sapply(DF2[,3:18], as.numeric)
+DF2 <- mutate(DF2, `Childhood Obesity 2009-2013`=(`Childhood Obesity 2009`+`Childhood Obesity 2010`+`Childhood Obesity 2011`+`Childhood Obesity 2012`+`Childhood Obesity 2013`)/5)
+DF2 <- mutate(DF2, `Incapacity Benefit rate - 2009-2013`=(`Incapacity Benefit rate - 2009`+`Incapacity Benefit rate - 2010`+`Incapacity Benefit rate - 2011`+`Incapacity Benefit rate - 2012`+`Incapacity Benefit rate - 2013`)/5)
+DF2 <- mutate(DF2, `Crime rate - 2009-2013`=(`Crime rate - 2009`+`Crime rate - 2010`+`Crime rate - 2011`+`Crime rate - 2012`+`Crime rate - 2013`)/5)
+
+DF3 <- select(DF2, -(`Childhood Obesity 2009`:`Crime rate - 2013`))
+```
+
+3. Correlation
+
+```{r}
+names(DF3)
+DF4 <- DF3[, c(6,3,4,5)]
+cor(DF4)
+
+```
+
+
+
+Rolling 5-year combined life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year. Index scores were reversed so higher life expectancy equals better well-being. 
+Source: ONS mortality data and GLA population projections, GLA Calculations.
+
+"Prevalence of obesity by area of child residence. The estimates use the latest three years of NCMP data combined eg '2013' covers 2010/11 to 2012/13. Children with a BMI greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. Earliest data available is 2008/09 to 2010/11, which has been used for 2009-2011.
+Source: National Obesity Observatory"					
+
+"Incapacity Benefit or Severe Disablement Allowance claimant rate. 
+Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
+Source: IB/SDA from DWP, Population from GLA projections."
+
+
+```{r}
+library(ggplot2)
+ggplot(DF4, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+ggplot(DF4, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+ggplot(DF4, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+
+ggplot(DF4, aes(x=cut(`Life Expectancy 2009-13`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+ggplot(DF4, aes(x=cut(`Childhood Obesity 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+ggplot(DF4, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+
+```
+
+
