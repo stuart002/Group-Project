@@ -4,11 +4,17 @@ author: "maria"
 date: "9/20/2017"
 output: html_document
 ---
+```{r}
+library(readxl)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+
+```
+
 
 
 ```{r, echo = FALSE}
-library(readxl)
-library(ggplot2)
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
 # data by borough
 crime_borough <- crime[629:660,]
@@ -37,7 +43,6 @@ Variables <- read_excel("./Variables.xlsx")[,1:3]
 Variables[2:3,1] <- ""
 Variables[2:3,1] <- ""
 Variables[6,1] <- ""
-library(knitr)
 kable(Variables)
 ```
 
@@ -50,6 +55,8 @@ Overview analysis
 Theory
 
 Correlations
+  Correlations with crime rate
+  
 
 Linear regression
 
