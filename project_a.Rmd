@@ -1,0 +1,59 @@
+---
+title: "project_a"
+author: "maria"
+date: "9/20/2017"
+output: html_document
+---
+
+
+```{r, echo = FALSE}
+library(readxl)
+library(ggplot2)
+crime <- read_excel("/Users/kerstinparlander/Documents/Imperial/M_SFA/Project/london-ward-well-being-probability-scores.xls", sheet = "Data")
+# data by borough
+crime_borough = crime[629:660,]
+# data by ward
+crime_ward = crime[2:626,]
+summary(crime_ward[,29])
+```
+
+Introduction
+
+Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drasticly different levels of crime and significant outliers, there must be an underlying explanation.
+
+The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
+
+Description
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
+
+Variables
+
+```{r, echo = FALSE}
+Variables[2:3,1] <- ""
+Variables[6,1] <- ""
+library(knitr)
+kable(Variables)
+```
+
+Strength and limitations
+
+Overview analysis
+-- Crime by borough
+-- Crime historically
+
+Theory
+
+Correlations
+
+Linear regression
+
+Conclusion and analysis
+
+
+
+
+
+
+
+
+
