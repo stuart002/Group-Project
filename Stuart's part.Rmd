@@ -59,6 +59,11 @@ ggplot(DF4, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_p
 ggplot(DF4, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
 ggplot(DF4, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
 
+ggplot(DF4, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()+ coord_trans(x = "log10", y = "log10")
+ggplot(DF4, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()+ coord_trans(x = "log10", y = "log10")
+ggplot(DF4, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()+ coord_trans(x = "log10", y = "log10")
+
+
 ggplot(DF4, aes(x=cut(`Life Expectancy 2009-13`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
 ggplot(DF4, aes(x=cut(`Childhood Obesity 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
 ggplot(DF4, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
