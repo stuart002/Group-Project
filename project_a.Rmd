@@ -9,12 +9,14 @@ output: html_document
 ```{r, echo = FALSE}
 library(readxl)
 library(ggplot2)
-crime <- read_excel("/Users/kerstinparlander/Documents/Imperial/M_SFA/Project/london-ward-well-being-probability-scores.xls", sheet = "Data")
+crime <- read_excel("london-ward-well-being-probability-scores.xls", sheet = "Data")
 # data by borough
-crime_borough = crime[629:660,]
+crime_borough <- crime[629:660,]
+crime_borough$`Crime rate - 2009` <- as.numeric(as.character(crime_borough$`Crime rate - 2009`))
 # data by ward
-crime_ward = crime[2:626,]
 summary(crime_ward[,29])
+
+crime_data$Crime.rate...2009 <- as.numeric(as.character(crime_data$Crime.rate...2009))
 ```
 
 Introduction
