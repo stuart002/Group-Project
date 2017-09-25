@@ -27,7 +27,7 @@ library(tidyr)
 ```{r, echo = FALSE}
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
 # data by borough
-crime_borough <- crime[629:660,]
+crime_borough <- crime[c(2,629:660),]
 crime_borough[,5:ncol(crime_borough)] <- sapply(crime_borough[,5:ncol(crime_borough)],as.numeric)
 # data by ward
 crime_ward <- crime[2:626,]
@@ -67,8 +67,57 @@ kable(Variables)
 
 ## Overview analysis
 ### Crime by borough
+
+
 ```{r crime_by_borough, message=FALSE, warning=FALSE, results='hide',echo=FALSE}
-crime_borough
+#selects relevant columns: borough (4) and all crime levels (25:29) and stores in crime_data_by_borough. Note boroughs are repeated because data is for wards
+
+crime_data_by_borough <- crime_borough[c(4,25:29)]
+
+#adds new column names to crime_data_by_borough
+colnames(crime_data_by_borough) <- c("borough", "2009", "2010", "2011","2012","2013")
+
+#calculates the average crime level data per year for each borough
+crime_data_borough_averages <- aggregate(crime_data_by_borough[, 2:6], list(crime_data_by_borough$borough), mean)
+
+#adds new column names to crime_data_borough_averages
+colnames(crime_data_borough_averages) <- c("borough", "2009", "2010", "2011","2012","2013")
+
+#calculates the growth of crime per borough
+growth <- (crime_data_borough_averages$`2013` - crime_data_borough_averages$`2009`)/crime_data_borough_averages$`2009`*100
+
+#Adds growth vector to crime_data_borough_averages
+crime_data_borough_averages$growth <- growth
+
+#Reads boroughs data as SpatialPolygonsDataFrame
+london_boroughs <- readOGR(dsn = "Official_data/Map_data/LondonBoroughs.shp") 
+
+#joins london_boroughs@data with crime_data_borough_averages based on the borough
+london_boroughs@data <- left_join(london_boroughs@data, crime_data_borough_averages, by = c('name' = 'borough'))
+
+london_boroughs_f <- fortify(london_boroughs)
+# allocate an id variable to the sp d
+london_boroughs$id <- row.names(london_boroughs)
+# join the data
+london_boroughs_f <- left_join(london_boroughs_f, london_boroughs@data) 
+
+#changes the structure of the dataset to be able to plot it to a graph
+london_boroughs_f_long <- gather(london_boroughs_f, crime_rate_year, crime_rate, -long, -lat, -order, -hole,-piece,-id,-group,-ons_label,-name,-Partic_Per,-Pop_2001, -PopDensity, -AREA, -PERIMETER, -PopDen, -growth)
+
+ggplot(data = london_boroughs_f_long, # the input data
+       aes(x = long, y = lat, fill = crime_rate, group = group)) + # define variables
+  geom_polygon() + # plot the boroughs
+  geom_path(colour="white", lwd=0.05) + # borough borders
+  coord_equal() + # fixed x and y scales
+  facet_wrap(~ crime_rate_year) + # one plot per year
+  scale_fill_gradient2(low = "#64B5F6",high = "#2196F3", # colors
+                        name = "Crime rate") + # legend options
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+
+
+
 ```
 
 ### Crime historically
