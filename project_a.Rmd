@@ -67,6 +67,10 @@ kable(Variables)
 
 ## Overview analysis
 ### Crime by borough
+```{r crime_by_borough, message=FALSE, warning=FALSE, results='hide',echo=FALSE}
+crime_borough
+```
+
 ### Crime historically
 
 ##Theory
