@@ -28,10 +28,10 @@ library(tidyr)
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
 # data by borough
 crime_borough <- crime[629:660,]
-crime_borough$`Crime rate - 2009` <- as.numeric(as.character(crime_borough$`Crime rate - 2009`))
+crime_borough[,5:ncol(crime_borough)] <- sapply(crime_borough[,5:ncol(crime_borough)],as.numeric)
 # data by ward
 crime_ward <- crime[2:626,]
-crime_ward$`Crime rate - 2009` <- as.numeric(as.character(crime_ward$`Crime rate - 2009`))
+crime_ward[,5:ncol(crime_ward)] <- sapply(crime_ward[,5:ncol(crime_ward)],as.numeric)
 summary(crime_ward[,29])
 
 
