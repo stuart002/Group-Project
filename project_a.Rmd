@@ -12,7 +12,7 @@ library(dplyr)
 
 ```
 
-
+#Analysing crime in London
 
 ```{r, echo = FALSE}
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
@@ -27,7 +27,7 @@ summary(crime_ward[,29])
 
 ```
 
-Introduction
+##Introduction
 
 Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drasticly different levels of crime and significant outliers, there must be an underlying explanation.
 
@@ -36,7 +36,7 @@ The dataset used in this report is from London datastore, an open data-sharing p
 Description
 Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
 
-Variables
+###Variables
 
 ```{r, echo = FALSE}
 Variables <- read_excel("./Variables.xlsx")[,1:3]
@@ -48,19 +48,19 @@ kable(Variables)
 
 Strength and limitations
 
-Overview analysis
--- Crime by borough
--- Crime historically
+## Overview analysis
+### Crime by borough
+### Crime historically
 
-Theory
+##Theory
 
-Correlations
-  Correlations with crime rate
+##Correlations
+###Correlations with crime rate
   
 
-Linear regression
+##Linear regression
 
-Conclusion and analysis
+##Conclusion and analysis
 
 
 
