@@ -9,7 +9,7 @@ output: html_document
 ```{r, echo = FALSE}
 library(readxl)
 library(ggplot2)
-crime <- read_excel("london-ward-well-being-probability-scores.xls", sheet = "Data")
+crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
 # data by borough
 crime_borough <- crime[629:660,]
 crime_borough$`Crime rate - 2009` <- as.numeric(as.character(crime_borough$`Crime rate - 2009`))
