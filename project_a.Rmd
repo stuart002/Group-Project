@@ -55,8 +55,10 @@ Overview analysis
 #Theory
 
 #Correlations
-##Correlations with crime rate
+##Correlations between crime rate and 3 health-related indexes
 ###Description
+These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
+
 Rolling 5-year combined life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year. Index scores were reversed so higher life expectancy equals better well-being. 
 Source: ONS mortality data and GLA population projections, GLA Calculations.
 
@@ -66,7 +68,7 @@ Source: National Obesity Observatory"
 "Incapacity Benefit or Severe Disablement Allowance claimant rate. 
 Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
 Source: IB/SDA from DWP, Population from GLA projections."
-###basic cleaning
+###basic data selecting
 ```{r}
 #read all the names of columns
 crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
