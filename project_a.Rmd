@@ -1,0 +1,229 @@
+---
+title: "project_a"
+author: "maria"
+date: "9/20/2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r packages, echo = FALSE, message=FALSE, warning=FALSE,}
+library(readxl)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+# BEGIN libraries for map !!! You might need to install these ones
+library(rgdal)
+library(dplyr)
+library(plyr)
+library(ggplot2)
+library(rgeos)
+library(tidyr)
+# END libraries for map
+
+```
+
+#Analysing crime in London
+
+```{r, echo = FALSE}
+crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
+# data by borough
+crime_borough <- crime[c(2,629:660),]
+crime_borough[,5:ncol(crime_borough)] <- sapply(crime_borough[,5:ncol(crime_borough)],as.numeric)
+# data by ward
+crime_ward <- crime[2:626,]
+crime_ward[,5:ncol(crime_ward)] <- sapply(crime_ward[,5:ncol(crime_ward)],as.numeric)
+summary(crime_ward[,29])
+
+
+```
+
+
+#Introduction
+Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drasticly different levels of crime and significant outliers, there must be an underlying explanation.
+
+The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
+
+##Description
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
+
+###Variables
+#Description
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
+
+#Variables
+
+
+```{r, echo = FALSE}
+Variables <- read_excel("./Variables.xlsx")[,1:3]
+Variables[2:3,1] <- ""
+Variables[2:3,1] <- ""
+Variables[6,1] <- ""
+kable(Variables)
+```
+
+
+##Strength and limitations
+
+
+## Overview analysis
+### Crime by borough
+
+From 2009 to 2013, the crime rates of all boroughs in London have decreased. As seen in the maps of figure x, the boroughs in the outskirts of London seem to have a lower crime rate than the boroughs in the center of London with exception to the City of London. 
+
+
+```{r crime_by_borough, message=FALSE, warning=FALSE, results='hide',echo=FALSE,fig.cap="Crime rate by borough from 2009 to 2013"}
+#selects relevant columns: borough (4) and all crime levels (25:29) and stores in crime_data_by_borough. Note boroughs are repeated because data is for wards
+
+crime_data_by_borough <- crime_borough[c(4,25:29)]
+
+#adds new column names to crime_data_by_borough
+colnames(crime_data_by_borough) <- c("borough", "2009", "2010", "2011","2012","2013")
+
+#calculates the average crime level data per year for each borough
+crime_data_borough_averages <- aggregate(crime_data_by_borough[, 2:6], list(crime_data_by_borough$borough), mean)
+
+#adds new column names to crime_data_borough_averages
+colnames(crime_data_borough_averages) <- c("borough", "2009", "2010", "2011","2012","2013")
+
+#calculates the growth of crime per borough
+growth <- (crime_data_borough_averages$`2013` - crime_data_borough_averages$`2009`)/crime_data_borough_averages$`2009`*100
+
+#Adds growth vector to crime_data_borough_averages
+crime_data_borough_averages$growth <- growth
+
+#Reads boroughs data as SpatialPolygonsDataFrame
+london_boroughs <- readOGR(dsn = "Official_data/Map_data/LondonBoroughs.shp") 
+
+#joins london_boroughs@data with crime_data_borough_averages based on the borough
+london_boroughs@data <- left_join(london_boroughs@data, crime_data_borough_averages, by = c('name' = 'borough'))
+
+london_boroughs_f <- fortify(london_boroughs)
+# allocate an id variable to the sp d
+london_boroughs$id <- row.names(london_boroughs)
+# join the data
+london_boroughs_f <- left_join(london_boroughs_f, london_boroughs@data) 
+
+#changes the structure of the dataset to be able to plot it to a graph
+london_boroughs_f_long <- gather(london_boroughs_f, crime_rate_year, crime_rate, -long, -lat, -order, -hole,-piece,-id,-group,-ons_label,-name,-Partic_Per,-Pop_2001, -PopDensity, -AREA, -PERIMETER, -PopDen, -growth)
+
+ggplot(data = london_boroughs_f_long, # the input data
+       aes(x = long, y = lat, fill = crime_rate, group = group)) + # define variables
+  geom_polygon() + # plot the boroughs
+  geom_path(colour="white", lwd=0.05) + # borough borders
+  coord_equal() + # fixed x and y scales
+  facet_wrap(~ crime_rate_year) + # one plot per year
+  scale_fill_gradient2(low = "#64B5F6",high = "#2196F3", # colors
+                        name = "Crime rate") + # legend options
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+
+
+
+```
+
+City of London, remains with the lowest rate of crime across all boroughs with only 14 offences per 1000 daytime inhabitants in 2013. In contrast, its neighbouring boroughs as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These boroughs are mainly located to the upper and lower side from the City of London. 
+
+```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate > 90 (2013)"}
+#plots the boroughs with highest crime rate of 100
+ggplot(london_boroughs_f, aes(long, lat, group = group, fill=`2013`>90)) +
+  geom_polygon() + geom_path(colour="white", lwd=0.05) + coord_equal() +
+  labs(x = "lat", y = "lon",
+       fill = "Crime rate > 90") +
+  scale_fill_manual(values=c("#BDBDBD","#2196F3")) +
+  ggtitle("Crime rate > 90 (2013) ") +
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+```
+
+On average, boroughs have lowered their crime rates to 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rates are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
+
+
+```{r crime_rate_growth, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate growth from 2009 to 2013"}
+ggplot(data = london_boroughs_f, # the input data
+       aes(x = long, y = lat, fill = growth, group = group)) + # define variables
+  geom_polygon() + # plot the boroughs
+  geom_path(colour="white", lwd=0.05) + # borough borders
+  ggtitle("Crime rate growth from 2009 to 2013 ") +
+  coord_equal() + # fixed x and y scales
+  scale_fill_gradient2(low = "#66BB6A",high = "#4CAF50", # colors
+                        name = "Growth (%)") + # legend options
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+```
+
+### Crime historically
+
+##Theory
+
+##Correlations
+###Correlations with crime rate
+
+#Theory
+
+#Correlations
+##Correlations between crime rate and 3 health-related indexes
+###Description
+These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
+
+Rolling 5-year combined life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year. Index scores were reversed so higher life expectancy equals better well-being. 
+Source: ONS mortality data and GLA population projections, GLA Calculations.
+
+"Prevalence of obesity by area of child residence. The estimates use the latest three years of NCMP data combined eg '2013' covers 2010/11 to 2012/13. Children with a BMI greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. Earliest data available is 2008/09 to 2010/11, which has been used for 2009-2011.
+Source: National Obesity Observatory"					
+
+"Incapacity Benefit or Severe Disablement Allowance claimant rate. 
+Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
+Source: IB/SDA from DWP, Population from GLA projections."
+###basic data selecting
+```{r}
+#read all the names of columns
+crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
+crime_health[,3:18] <- sapply(crime_health[,3:18], as.numeric)
+crime_health <- mutate(crime_health, `Childhood Obesity 2009-2013`=(`Childhood Obesity 2009`+`Childhood Obesity 2010`+`Childhood Obesity 2011`+`Childhood Obesity 2012`+`Childhood Obesity 2013`)/5)
+crime_health <- mutate(crime_health, `Incapacity Benefit rate - 2009-2013`=(`Incapacity Benefit rate - 2009`+`Incapacity Benefit rate - 2010`+`Incapacity Benefit rate - 2011`+`Incapacity Benefit rate - 2012`+`Incapacity Benefit rate - 2013`)/5)
+crime_health <- mutate(crime_health, `Crime rate - 2009-2013`=(`Crime rate - 2009`+`Crime rate - 2010`+`Crime rate - 2011`+`Crime rate - 2012`+`Crime rate - 2013`)/5)
+
+crime_health1 <- select(crime_health, -(`Childhood Obesity 2009`:`Crime rate - 2013`))
+```
+
+###Correlation Analysis
+```{r}
+names(crime_health1)
+crime_health2 <- crime_health1[, c(6,3,4,5)]
+cor(crime_health2)
+
+```
+###Plots
+```{r}
+ggplot(crime_health2, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+ggplot(crime_health2, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+ggplot(crime_health2, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+
+ggplot(crime_health2, aes(x=cut(`Life Expectancy 2009-13`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+ggplot(crime_health2, aes(x=cut(`Childhood Obesity 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+ggplot(crime_health2, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+
+```
+  
+  
+  
+  
+  
+
+  
+
+##Linear regression
+
+##Conclusion and analysis
+
+
+
+
+
+
+
+
+
