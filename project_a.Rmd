@@ -9,6 +9,14 @@ library(readxl)
 library(ggplot2)
 library(knitr)
 library(dplyr)
+# BEGIN libraries for map !!! You might need to install these ones
+library(rgdal)
+library(dplyr)
+library(plyr)
+library(ggplot2)
+library(rgeos)
+library(tidyr)
+# END libraries for map
 
 ```
 
@@ -33,7 +41,7 @@ Crime rate in London varies drastically by area. In 2013, crime rates ranged fro
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
-Description
+##Description
 Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
 
 ###Variables
@@ -46,7 +54,7 @@ Variables[6,1] <- ""
 kable(Variables)
 ```
 
-Strength and limitations
+##Strength and limitations
 
 ## Overview analysis
 ### Crime by borough
