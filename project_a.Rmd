@@ -2,17 +2,27 @@
 title: "project_a"
 author: "maria"
 date: "9/20/2017"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
-```{r}
+```{r packages, echo = FALSE, message=FALSE, warning=FALSE,}
 library(readxl)
 library(ggplot2)
 library(knitr)
 library(dplyr)
+# BEGIN libraries for map !!! You might need to install these ones
+library(rgdal)
+library(dplyr)
+library(plyr)
+library(ggplot2)
+library(rgeos)
+library(tidyr)
+# END libraries for map
 
 ```
 
-
+#Analysing crime in London
 
 ```{r, echo = FALSE}
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
@@ -27,16 +37,21 @@ summary(crime_ward[,29])
 
 ```
 
-#Introduction
 
+#Introduction
 Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drasticly different levels of crime and significant outliers, there must be an underlying explanation.
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
+##Description
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
+
+###Variables
 #Description
 Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
 
 #Variables
+
 
 ```{r, echo = FALSE}
 Variables <- read_excel("./Variables.xlsx")[,1:3]
@@ -46,17 +61,26 @@ Variables[6,1] <- ""
 kable(Variables)
 ```
 
-#Strength and limitations
 
-Overview analysis
--- Crime by borough
--- Crime historically
+##Strength and limitations
+
+
+## Overview analysis
+### Crime by borough
+### Crime historically
+
+##Theory
+
+##Correlations
+###Correlations with crime rate
 
 #Theory
 
 #Correlations
-##Correlations with crime rate
+##Correlations between crime rate and 3 health-related indexes
 ###Description
+These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
+
 Rolling 5-year combined life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year. Index scores were reversed so higher life expectancy equals better well-being. 
 Source: ONS mortality data and GLA population projections, GLA Calculations.
 
@@ -66,7 +90,7 @@ Source: National Obesity Observatory"
 "Incapacity Benefit or Severe Disablement Allowance claimant rate. 
 Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
 Source: IB/SDA from DWP, Population from GLA projections."
-###basic cleaning
+###basic data selecting
 ```{r}
 #read all the names of columns
 crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
@@ -101,12 +125,12 @@ ggplot(crime_health2, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5
   
   
   
-  
+
   
 
-Linear regression
+##Linear regression
 
-Conclusion and analysis
+##Conclusion and analysis
 
 
 
