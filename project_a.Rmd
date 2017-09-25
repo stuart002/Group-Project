@@ -70,7 +70,6 @@ Incapacity Benefit (IB) is paid to people who are incapable of work and who meet
 Source: IB/SDA from DWP, Population from GLA projections."
 ###basic data selecting
 ```{r}
-#read all the names of columns
 crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
 crime_health[,3:18] <- sapply(crime_health[,3:18], as.numeric)
 crime_health <- mutate(crime_health, `Childhood Obesity 2009-2013`=(`Childhood Obesity 2009`+`Childhood Obesity 2010`+`Childhood Obesity 2011`+`Childhood Obesity 2012`+`Childhood Obesity 2013`)/5)
@@ -78,6 +77,7 @@ crime_health <- mutate(crime_health, `Incapacity Benefit rate - 2009-2013`=(`Inc
 crime_health <- mutate(crime_health, `Crime rate - 2009-2013`=(`Crime rate - 2009`+`Crime rate - 2010`+`Crime rate - 2011`+`Crime rate - 2012`+`Crime rate - 2013`)/5)
 
 crime_health1 <- select(crime_health, -(`Childhood Obesity 2009`:`Crime rate - 2013`))
+crime_CO <- select(crime_health, Ward, Borough, `Childhood Obesity 2009`:`Childhood Obesity 2013`,`Crime rate - 2009`:`Crime rate - 2013` )
 ```
 
 ###Correlation Analysis
