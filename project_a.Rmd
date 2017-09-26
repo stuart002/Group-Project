@@ -11,13 +11,14 @@ library(readxl)
 library(ggplot2)
 library(knitr)
 library(dplyr)
+library(rlang)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
 # BEGIN libraries for map !!! You might need to install these ones
 library(rgdal)
-library(dplyr)
 library(plyr)
-library(ggplot2)
 library(rgeos)
-library(tidyr)
 # END libraries for map
 
 ```
