@@ -230,7 +230,7 @@ The scatter plot shows the average crime rate (over the 5 years) across each bor
 
 
 #Correlation Analysis
-The correlation analysis in this report adopts the Pearson correlation coefficient with the aim to examine the strength and direction of the linear relationship between two variables, i.e. crime rate and one other factors.The correlation coefficient ranges from −1 to +1, and stronger relationship between two variables as larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
+The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one other rates.The correlation coefficient ranges from −1 to +1, and stronger relationship between two variables as larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
 
 The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal.
 
@@ -269,31 +269,38 @@ cor_plot <- function(col_name) {
 These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
 ###Life Expectancy
 According to the data description provided by London datastore, rolling 5-year combined life expectancies instead of simple one-year life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year.
-
+A study in 2015 reviewed that biological aging processes may be impacted by socioeconomic milieu, meaning that those who living in noisy area with high crime may have shorter cellular aging estimated by leukocyte telomere length (Park et al., 2015). Therefore, it is reasonable to estimate that a negative correlation between crime rate and life expectancy.
 
 
 ```{r}
 cor_plot("life_expectancy")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =10), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
+ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
-From the above scatter points in different years, moderate negative relationship between crime rate and life expectancy can be found, with Pearson r from -0.3631 to 0.4545 in 5 different years. Also, a significant portion of points are far from the smooth line indicates only a moderate linear relationship between the variables.
+From the above scatter points in different years, weak-to-moderate negative relationship between crime rate and life expectancy can be found, with Pearson r from -0.3631 to 0.4545 in 5 different years. Also, a significant portion of points are far from the smooth line indicates only a moderate linear relationship between the variables.
 
 ###Childhood Obesity
-This estimates use the latest three years of National Child Measurement Programme (NCMP) data combined. This means, the data in 2013 is the average of data in 2011, 2012, and 2013. In addition, children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. 
+This estimates use the latest three years of National Child Measurement Programme (NCMP) data combined. This means, the data in 2013 is the average of data in 2011, 2012, and 2013. In addition, children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese.
+
+An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
+Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation before actually conducting the analysis.
+
 ```{r}
 cor_plot("childhood_obesity")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =5), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
+ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
-Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a moderate positive relationship, with Pearson r's range from 0.372 to 0.389.
+Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a weak-to-moderate positive relationship, with Pearson r's range from 0.372 to 0.389.
+The analysis results confirm our expectation based on the study conducted by An et al. (2017).
 It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
 
 ###Incapacity Benefit
-Incapacity Benefit rate is the rate of paying Incapacity Benefit (IB) to those who aged 16-64 and unable to work for 28 weeks in a row or more because of illness or disability by Severe Disablement Allowance (SDA).
+Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate.Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
 ```{r}
 cor_plot("incapacity_benefit")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =5), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
+ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
-Again crime rate and incapacity benefit rate have a moderate positive relationship with Pearson r's range from 0.3917 to 0.4752 in different years.
+Again crime rate and incapacity benefit rate have a moderate positive relationship according to Pearson r's range from 0.3917 to 0.4752 in different years.
+Although the maximum incapacity benefit rate decreased continously from around 15% in 2009 to around 5% in 2013, wards with highest incapacity benefit rates have relatively low crime rates in all 5 years.  
+A number of wards have relatively high crime rates while having similar incapacity benefit rates as other wards. This may indicate that crime rate correlates to not only incapacity benefit but also other variables.
 
 In conclusion, moderate correlations are found between crime rate and three health-related rates. The moderate correlations may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. Many outliers, shown on the the above boxplots, may greatly affect the result of the correlation between crime rate and other variable.
 
