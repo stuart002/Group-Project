@@ -39,7 +39,7 @@ summary(crime_ward[,29])
 
 
 # Introduction
-Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation..
+Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
@@ -229,23 +229,18 @@ Looking at crime rates across the five years, we can see clear trend of crime ra
 The scatter plot shows the average crime rate (over the 5 years) across each borough. One thing to note, is the City of London, which has the lowest crime rate across all of London. 
 
 
-##Theory
+#Correlation Analysis
+The correlation analysis in this report adopts the Pearson correlation coefficient with the aim to examine the strength and direction of the linear relationship between two variables, i.e. crime rate and one other factors.The correlation coefficient ranges from −1 to +1, and stronger relationship between two variables as larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
 
+The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal.
 
-
-##Correlations
-###Correlations with crime rate
-
-#Theory
-
-#Correlations
 ```{r}
 #the following loop can produce long table 
-var_list = c("childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
+var_list = c("life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
 
 crime_ward_long = data.frame()
 for (i in 1:length(var_list)) {
-  temp <- select(crime_ward, Ward, Borough, (i*5+5):(i*5+9))
+  temp <- select(crime_ward, Ward, Borough, (i*5):(i*5+4))
   colnames(temp)[3:7] <- c(2009:2013)
   tidytemp <- gather_(temp, "year", var_list[i], colnames(temp)[3:7])
   if (i==1) {
@@ -257,72 +252,50 @@ for (i in 1:length(var_list)) {
 gb <- crime_ward_long %>% dplyr::group_by(year)
 
 ```
-
-
 ```{r}
-# the codes below define a function that allows you to make scatters with correlation on them
+# the codes below define a function that allows you to make scatters boxplot with correlation on them
 # argument: col_name, string with double quotes, e.g. "unemployment_rate"
 cor_plot <- function(col_name) {
   corr <- dplyr::summarise(gb,r=round(cor(!!sym(col_name),crime_rate),4))
-  print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.5)+
+  print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.2)+
     facet_wrap(~ year, nrow=2) +
     geom_smooth() +
     geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[col_name]],0.9),y=270) )
 }
 # cor_plot("unemployment_rate")
 ```
-
-
 ##Correlations between crime rate and 3 health-related indexes
 ###Description
 These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
+###Life Expectancy
+According to the data description provided by London datastore, rolling 5-year combined life expectancies instead of simple one-year life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year.
 
-Rolling 5-year combined life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year. Index scores were reversed so higher life expectancy equals better well-being. 
-Source: ONS mortality data and GLA population projections, GLA Calculations.
 
-"Prevalence of obesity by area of child residence. The estimates use the latest three years of NCMP data combined eg '2013' covers 2010/11 to 2012/13. Children with a BMI greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. Earliest data available is 2008/09 to 2010/11, which has been used for 2009-2011.
-Source: National Obesity Observatory"					
 
-"Incapacity Benefit or Severe Disablement Allowance claimant rate. 
-Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
-Source: IB/SDA from DWP, Population from GLA projections."
-###basic data selecting
 ```{r}
-#read all the names of columns
-crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
-crime_health[,3:18] <- sapply(crime_health[,3:18], as.numeric)
-crime_health <- mutate(crime_health, `Childhood Obesity 2009-2013`=(`Childhood Obesity 2009`+`Childhood Obesity 2010`+`Childhood Obesity 2011`+`Childhood Obesity 2012`+`Childhood Obesity 2013`)/5)
-crime_health <- mutate(crime_health, `Incapacity Benefit rate - 2009-2013`=(`Incapacity Benefit rate - 2009`+`Incapacity Benefit rate - 2010`+`Incapacity Benefit rate - 2011`+`Incapacity Benefit rate - 2012`+`Incapacity Benefit rate - 2013`)/5)
-crime_health <- mutate(crime_health, `Crime rate - 2009-2013`=(`Crime rate - 2009`+`Crime rate - 2010`+`Crime rate - 2011`+`Crime rate - 2012`+`Crime rate - 2013`)/5)
-
-crime_health1 <- select(crime_health, -(`Childhood Obesity 2009`:`Crime rate - 2013`))
+cor_plot("life_expectancy")
+ggplot(gb, aes(x=cut(childhood_obesity, breaks =10), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
+From the above scatter points in different years, moderate negative relationship between crime rate and life expectancy can be found, with Pearson r from -0.3631 to 0.4545 in 5 different years. Also, a significant portion of points are far from the smooth line indicates only a moderate linear relationship between the variables.
 
-###Correlation Analysis
+###Childhood Obesity
+This estimates use the latest three years of National Child Measurement Programme (NCMP) data combined. This means, the data in 2013 is the average of data in 2011, 2012, and 2013. In addition, children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. 
 ```{r}
-names(crime_health1)
-crime_health2 <- crime_health1[, c(6,3,4,5)]
-cor(crime_health2)
-
+cor_plot("childhood_obesity")
+ggplot(gb, aes(x=cut(childhood_obesity, breaks =5), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
-###Plots
+Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a moderate positive relationship, with Pearson r's range from 0.372 to 0.389.
+It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
+
+###Incapacity Benefit
+Incapacity Benefit rate is the rate of paying Incapacity Benefit (IB) to those who aged 16-64 and unable to work for 28 weeks in a row or more because of illness or disability by Severe Disablement Allowance (SDA).
 ```{r}
-ggplot(crime_health2, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-ggplot(crime_health2, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-ggplot(crime_health2, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-
-ggplot(crime_health2, aes(x=cut(`Life Expectancy 2009-13`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-ggplot(crime_health2, aes(x=cut(`Childhood Obesity 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-ggplot(crime_health2, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-
+cor_plot("incapacity_benefit")
+ggplot(gb, aes(x=cut(childhood_obesity, breaks =5), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
-  
-  
-  
-  
-  
+Again crime rate and incapacity benefit rate have a moderate positive relationship with Pearson r's range from 0.3917 to 0.4752 in different years.
 
-  
+In conclusion, moderate correlations are found between crime rate and three health-related rates. The moderate correlations may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. Many outliers, shown on the the above boxplots, may greatly affect the result of the correlation between crime rate and other variable.
 
 ##Linear regression
 
