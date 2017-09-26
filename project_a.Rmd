@@ -314,7 +314,7 @@ cor_plot("unemployment_rate")
 We also expect areas with considerately dense population (i.e. inner London) may potentially have more crimes even if the general employment rate are similar to suburban areas. If we split boroughs into inner and outer London, we can see employment and crime rate show only weak correlations of around 0.2 for innter London but stronger correlations (0.58-0.62) for outer London boroughs. 
 ```{r}
 # split borough into inner and outer
-desig <- read.csv("borough_desig.csv")
+desig <- read.csv("./Official_data/borough_desig.csv")
 crime_ward_long_desig <- merge(crime_ward_long[2:nrow(crime_ward_long),],desig,by="Borough")
 inner_ward <- crime_ward_long_desig%>% filter(Designation=="Inner")
 outer_ward <- crime_ward_long_desig%>% filter(Designation=="Outer")
