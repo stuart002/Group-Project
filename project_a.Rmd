@@ -164,6 +164,33 @@ ggplot(data = london_boroughs_f, # the input data
 #Theory
 
 #Correlations
+```{r}
+#the following codes can produce long table and plots with correlations on them
+# correlation part not finished
+var_list = c("childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
+
+crime_ward_long = data.frame()
+for (i in 1:length(var_list)) {
+  temp <- select(crime_ward, Ward, Borough, (i*5+5):(i*5+9))
+  colnames(temp)[3:7] <- c(2009:2013)
+  tidytemp <- gather_(temp, "year", var_list[i], colnames(temp)[3:7])
+  if (i==1) {
+    crime_ward_long <- tidytemp
+  } else {
+    crime_ward_long <- cbind(crime_ward_long, tidytemp[,4])
+  }
+}
+crime_ward_long <- crime_ward_long[,c(1:3,7,4:6,8:13)]
+gb <- crime_ward_long %>% dplyr::group_by(year)
+for (i in 5:13) {
+  print(ggplot(crime_ward_long,aes_string(x=colnames(gb)[i],y="crime_rate"))+geom_point(alpha=0.5)+
+    facet_wrap(~ year, nrow=2) +
+    geom_smooth()  )
+}
+
+```
+
+
 ##Correlations between crime rate and 3 health-related indexes
 ###Description
 These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
