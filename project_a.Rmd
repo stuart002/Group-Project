@@ -156,7 +156,82 @@ ggplot(data = london_boroughs_f, # the input data
 
 ### Crime historically
 
+###AMR###
+
+###TEXT: added some intro text. Check with Maria if it is needed for report###
+Crime, in general, is very hard to measure and as in various big cities around the world, measuring crime in London is no easy task. Police statistics is usually the only measure to local crime. However, police crime figures are not always accurate as they tend to understate recorded crime statistics. Accordingly, crime statistics needs to be investigated with caution; sometimes data from hospitals intakes or victim surveys infer very different theories. Geographically, London is divided into 32 boroughs and each borough consists of multiple wards. During our analysis, we will look at crimes rates across the 32 boroughs along 5 years; from 2009 till 2013.
+
+Analyzing crime data across London benefit both the governmental organizations and the individuals. For example, organizations can use the data to implement better services and check for core reasons why crime in one area is higher than the other, while, individuals can utilize this data to make calculated decisions on where to buy or rent a house in London. 
+
+Our dataset measures the well-being scores across all London's wards. In our analysis, we will look at how different factors affect crime rates in different areas, such as how do unemployment rate affect crime rates or how GSCE test score relate to the crime rates. We will investigate the relationship between crime and different factors using linear regression tests and other statistical tests such as hypothesis test.
+###TEXT###
+
+```{r}
+
+# selects relevant data from the whole dataset. Borough and crime rate on each of the 5 years.
+crime_by_year <- crime_borough[, c(4, 25:29)]
+
+# changes the names of the coloumns
+colnames(crime_by_year) <- c("Borough", "Crime_Rate_2009", "Crime_Rate_2010", "Crime_Rate_2011","Crime_Rate_2012","Crime_Rate_2013")
+
+# plot the crime rate of 2009 for each borough
+ggplot(crime_by_year, aes(Borough, Crime_Rate_2009)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 150)
+
+# plot the crime rate of 2010 for each borough
+ggplot(crime_by_year, aes(Borough, Crime_Rate_2010)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 150)
+
+# plot the crime rate of 2011 for each borough
+ggplot(crime_by_year, aes(Borough, Crime_Rate_2011)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 150)
+
+# plot the crime rate of 2012 for each borough
+ggplot(crime_by_year, aes(Borough, Crime_Rate_2012)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 150)
+
+# plot the crime rate of 2013 for each borough
+ggplot(crime_by_year, aes(Borough, Crime_Rate_2013)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 150)
+
+###Ask Valeria on how to put the 5 plots on one plot (just like the maps one)###
+
+summary(crime_by_year)
+
+
+#Average crime over the 5 years, per borough
+average <- crime_by_year %>% mutate(average = (Crime_Rate_2009 + Crime_Rate_2010 + Crime_Rate_2011 + Crime_Rate_2012 + Crime_Rate_2013)/ 5)
+
+
+ggplot(average, aes(Borough, average)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 150)
+
+ggplot(average, aes(Borough, average)) +
+  geom_point() +
+  theme(axis.text = element_text(angle = 45, hjust = 1))
+
+```
+
+Looking at crime rates across the five years, we can see clear trend of crime rates decreasing from 2009 till 2013 across all the London boroughs. The bar plots, for each year, show the crim rates per borough for that specific year. If you compare the 5 plots, you will notice that the crime rates are decreasing year by year.
+
+The scatter plot shows the average crime rate (over the 5 years) across each borough. One thing to note, is the City of London, which has the lowest crime rate across all of London. 
+
+
 ##Theory
+
+
 
 ##Correlations
 ###Correlations with crime rate
