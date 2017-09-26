@@ -11,13 +11,13 @@ library(readxl)
 library(ggplot2)
 library(knitr)
 library(dplyr)
+library(rlang)
+library(dplyr)
+library(tidyr)
 # BEGIN libraries for map !!! You might need to install these ones
 library(rgdal)
-library(dplyr)
 library(plyr)
-library(ggplot2)
 library(rgeos)
-library(tidyr)
 # END libraries for map
 
 ```
@@ -38,8 +38,8 @@ summary(crime_ward[,29])
 ```
 
 
-#Introduction
-Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drasticly different levels of crime and significant outliers, there must be an underlying explanation.
+# Introduction
+Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation..
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
@@ -54,7 +54,7 @@ Information on the 12 key indicators of well-being are given for 625 wards in Lo
 
 
 ```{r, echo = FALSE}
-Variables <- read_excel("./Variables.xlsx")[,1:3]
+Variables <- read_excel("./Official_data/Variables.xlsx")[,1:3]
 Variables[2:3,1] <- ""
 Variables[2:3,1] <- ""
 Variables[6,1] <- ""
@@ -164,6 +164,40 @@ ggplot(data = london_boroughs_f, # the input data
 #Theory
 
 #Correlations
+```{r}
+#the following loop can produce long table 
+var_list = c("childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
+
+crime_ward_long = data.frame()
+for (i in 1:length(var_list)) {
+  temp <- select(crime_ward, Ward, Borough, (i*5+5):(i*5+9))
+  colnames(temp)[3:7] <- c(2009:2013)
+  tidytemp <- gather_(temp, "year", var_list[i], colnames(temp)[3:7])
+  if (i==1) {
+    crime_ward_long <- tidytemp
+  } else {
+    crime_ward_long <- cbind(crime_ward_long, tidytemp[,4])
+  }
+}
+gb <- crime_ward_long %>% dplyr::group_by(year)
+
+```
+
+
+```{r}
+# the codes below define a function that allows you to make scatters with correlation on them
+# argument: col_name, string with double quotes, e.g. "unemployment_rate"
+cor_plot <- function(col_name) {
+  corr <- dplyr::summarise(gb,r=round(cor(!!sym(col_name),crime_rate),4))
+  print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.5)+
+    facet_wrap(~ year, nrow=2) +
+    geom_smooth() +
+    geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[col_name]],0.9),y=270) )
+}
+# cor_plot("unemployment_rate")
+```
+
+
 ##Correlations between crime rate and 3 health-related indexes
 ###Description
 These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
