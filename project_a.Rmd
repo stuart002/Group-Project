@@ -13,7 +13,6 @@ library(knitr)
 library(dplyr)
 library(rlang)
 library(dplyr)
-library(ggplot2)
 library(tidyr)
 # BEGIN libraries for map !!! You might need to install these ones
 library(rgdal)
@@ -166,8 +165,7 @@ ggplot(data = london_boroughs_f, # the input data
 
 #Correlations
 ```{r}
-#the following codes can produce long table and plots with correlations on them
-# correlation part not finished
+#the following loop can produce long table 
 var_list = c("childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
 
 crime_ward_long = data.frame()
@@ -182,16 +180,21 @@ for (i in 1:length(var_list)) {
   }
 }
 gb <- crime_ward_long %>% dplyr::group_by(year)
-for (item in var_list) {
-  if (item!="crime_rate") {
-    corr <- dplyr::summarise(gb,r=round(cor(!!sym(item),crime_rate),4))
-    print(ggplot(crime_ward_long,aes_string(x=item,y="crime_rate"))+geom_point(alpha=0.5)+
-      facet_wrap(~ year, nrow=2) +
-      geom_smooth() +
-      geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[item]],0.9),y=270) )
-  }
-}
 
+```
+
+
+```{r}
+# the codes below define a function that allows you to make scatters with correlation on them
+# argument: col_name, string with double quotes, e.g. "unemployment_rate"
+cor_plot <- function(col_name) {
+  corr <- dplyr::summarise(gb,r=round(cor(!!sym(col_name),crime_rate),4))
+  print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.5)+
+    facet_wrap(~ year, nrow=2) +
+    geom_smooth() +
+    geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[col_name]],0.9),y=270) )
+}
+# cor_plot("unemployment_rate")
 ```
 
 
