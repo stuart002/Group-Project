@@ -228,6 +228,19 @@ The correlation analysis in this report adopts the Pearson correlation coefficie
 
 The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal.
 
+##Test of correlation 
+The following part will test the significant of the correlation between crime rates and other variables
+```{r}
+for (i in 1:length(var_list)){
+  cor_test <- cor.test(gb[[var_list[i]]], gb$crime_rate)
+  print(var_list[i])
+  print(cor_test)
+}
+cor.test(crime_ward$`Crime rate - 2013`,crime_ward$`Subjective well-being average score, 2013` )
+
+```
+
+
 ```{r}
 #the following loop can produce long table 
 var_list = c("life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
@@ -253,7 +266,7 @@ cor_plot <- function(col_name) {
   corr <- dplyr::summarise(gb,r=round(cor(!!sym(col_name),crime_rate),4))
   print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.2)+
     facet_wrap(~ year, nrow=2) +
-    geom_smooth() +
+    geom_smooth(method="lm") +
     geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[col_name]],0.9),y=270) )
 }
 # cor_plot("unemployment_rate")
@@ -268,7 +281,6 @@ A study in 2015 reviewed that biological aging processes may be impacted by soci
 
 ```{r}
 cor_plot("life_expectancy")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
 From the above scatter points in different years, weak-to-moderate negative relationship between crime rate and life expectancy can be found, with Pearson r from -0.3631 to 0.4545 in 5 different years. Also, a significant portion of points are far from the smooth line indicates only a moderate linear relationship between the variables.
 
@@ -280,8 +292,14 @@ Therefore, we expect childhood obesity rate and crime rate have moderate positiv
 
 ```{r}
 cor_plot("childhood_obesity")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
+
+
+
+
+
+
+
 Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a weak-to-moderate positive relationship, with Pearson r's range from 0.372 to 0.389.
 The analysis results confirm our expectation based on the study conducted by An et al. (2017).
 It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
@@ -290,7 +308,6 @@ It is noticebaly that expect for in year 2013, wards that have extremely high ch
 Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate.Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
 ```{r}
 cor_plot("incapacity_benefit")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
 Again crime rate and incapacity benefit rate have a moderate positive relationship according to Pearson r's range from 0.3917 to 0.4752 in different years.
 Although the maximum incapacity benefit rate decreased continously from around 15% in 2009 to around 5% in 2013, wards with highest incapacity benefit rates have relatively low crime rates in all 5 years.  
