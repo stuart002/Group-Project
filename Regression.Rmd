@@ -1,0 +1,62 @@
+---
+title: "Untitled"
+author: "maria"
+date: "27 September 2017"
+output: html_document
+---
+```{r, echo = FALSE}
+library(readxl)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(rlang)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+# BEGIN libraries for map !!! You might need to install these ones
+library(rgdal)
+library(plyr)
+library(rgeos)
+# END libraries for map
+```
+
+#Analysing crime in London
+
+```{r, echo = FALSE}
+crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
+# data by borough
+crime_borough <- crime[c(2,629:660),]
+crime_borough[,5:ncol(crime_borough)] <- sapply(crime_borough[,5:ncol(crime_borough)],as.numeric)
+# data by ward
+crime_ward <- crime[2:626,]
+crime_ward[,5:ncol(crime_ward)] <- sapply(crime_ward[,5:ncol(crime_ward)],as.numeric)
+summary(crime_ward[,29])
+```
+
+```{r}
+crime_ward_13 <- crime_ward[,c(3, 9, 14, 24, 29, 34, 39, 44, 49, 54, 59, 64)]
+names(crime_ward_13) <- c('ward', 'life_exp', 'child_ob', 'unemp', 'crime', 'fires', 'gcse', 'absence', 'out_of_work', 'public_trans', 'greenspace', 'well_being')
+```
+
+Regression
+
+```{r}
+library(texreg)
+library(stargazer)
+```
+
+
+```{r}
+lin_full <- lm(crime ~ life_exp + child_ob + unemp + crime + fires + gcse + absence + out_of_work + public_trans + greenspace , data = crime_ward_13)
+lin1 <- lm(crime ~ unemp + life_exp + absence + public_trans, data = crime_ward_13)
+```
+
+```{r}
+stargazer(list(lin_full, lin1), type = 'text', digits = 2)
+```
+
+Unemployment rate has been historically linked to crime through prevalence of  antisocial behaviour
+Issues
+- other factors (such as wage, policing, residential)
+- wards are small and cross-transit is common
+
