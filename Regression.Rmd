@@ -54,7 +54,6 @@ lin1 <- lm(crime ~ unemp + life_exp + absence + public_trans, data = crime_ward_
 ```{r}
 stargazer(list(lin_full, lin1), type = 'text', digits = 2)
 ```
-
 Unemployment rate has been historically linked to crime through prevalence of  antisocial behaviour
 Issues
 - other factors (such as wage, policing, residential)
