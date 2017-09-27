@@ -228,35 +228,20 @@ The correlation analysis in this report adopts the Pearson correlation coefficie
 
 The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal.
 
-```{r}
-#the following loop can produce long table 
-var_list = c("life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
 
-crime_ward_long = data.frame()
-for (i in 1:length(var_list)) {
-  temp <- select(crime_ward, Ward, Borough, (i*5):(i*5+4))
-  colnames(temp)[3:7] <- c(2009:2013)
-  tidytemp <- gather_(temp, "year", var_list[i], colnames(temp)[3:7])
-  if (i==1) {
-    crime_ward_long <- tidytemp
-  } else {
-    crime_ward_long <- cbind(crime_ward_long, tidytemp[,4])
-  }
-}
-gb <- crime_ward_long %>% dplyr::group_by(year)
-
-```
 ```{r}
+# crime_ward_2013
+crime_ward_2013 <- crime_ward[,c(3,4,seq(9,64,5))]
+colnames(crime_ward_2013) <- c("Ward", "Borough","life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access","well-being")
 # the codes below define a function that allows you to make scatters boxplot with correlation on them
 # argument: col_name, string with double quotes, e.g. "unemployment_rate"
 cor_plot <- function(col_name) {
-  corr <- dplyr::summarise(gb,r=round(cor(!!sym(col_name),crime_rate),4))
-  print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.2)+
-    facet_wrap(~ year, nrow=2) +
-    geom_smooth() +
-    geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[col_name]],0.9),y=270) )
+  corr <- data.frame(r=round(cor(crime_ward_2013[[col_name]],crime_ward_2013[,"crime_rate"]),4))
+  print(ggplot(crime_ward_2013,aes_string(x=col_name,y="crime_rate")) + geom_point(alpha=0.2) +
+    geom_smooth(method = "lm") +
+    geom_text(data=corr, aes(label=paste("r=",crime_rate,sep="")),x=quantile(crime_ward_2013[[col_name]],0.9),y=200) )
 }
-# cor_plot("unemployment_rate")
+cor_plot("unemployment_rate")
 ```
 ## Correlations between crime rate and 3 health-related indexes
 ### Description
@@ -309,24 +294,20 @@ We also expect areas with considerately dense population (i.e. inner London) may
 ```{r}
 # split borough into inner and outer
 desig <- read.csv("./Official_data/borough_desig.csv")
-crime_ward_long_desig <- merge(crime_ward_long[2:nrow(crime_ward_long),],desig,by="Borough")
-inner_ward <- crime_ward_long_desig%>% filter(Designation=="Inner")
-outer_ward <- crime_ward_long_desig%>% filter(Designation=="Outer")
-corr <- inner_ward%>% group_by(year)%>%
-  dplyr::summarise(r=round(cor(unemployment_rate,crime_rate),4))
+crime_ward_2013_desig <- merge(crime_ward_2013[2:nrow(crime_ward_2013),],desig,by="Borough")
+inner_ward <- crime_ward_2013_desig%>% filter(Designation=="Inner")
+outer_ward <- crime_ward_2013_desig%>% filter(Designation=="Outer")
+corr <- data.frame(r=round(cor(inner_ward[,"unemployment_rate"],inner_ward[,"crime_rate"]),4))
 ggplot(inner_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
-  facet_wrap(~ year, nrow=2) +
-  geom_smooth() +
-  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(inner_ward$unemployment_rate,0.9),y=250) 
+  geom_smooth(method="lm") +
+  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(inner_ward$unemployment_rate,0.9),y=200) 
 
-corr <- outer_ward%>% group_by(year)%>%
-  dplyr::summarise(r=round(cor(unemployment_rate,crime_rate),4))
+corr <- data.frame(r=round(cor(outer_ward[,"unemployment_rate"],outer_ward[,"crime_rate"]),4))
 ggplot(outer_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
-  facet_wrap(~ year, nrow=2) +
-  geom_smooth() +
-  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(outer_ward$unemployment_rate,0.9),y=250) 
+  geom_smooth(method="lm") +
+  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(outer_ward$unemployment_rate,0.9),y=200)
 
-mean_desig <- crime_ward_long_desig%>% group_by(Designation)  %>% dplyr::summarise(avg_crime=mean(crime_rate))
+mean_desig <- crime_ward_2013_desig%>% group_by(Designation)  %>% dplyr::summarise(avg_crime=mean(crime_rate))
 mean_desig
 ```
 ## Education
