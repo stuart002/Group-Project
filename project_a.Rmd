@@ -3,8 +3,8 @@ title: "project_a"
 author: "maria"
 date: "9/20/2017"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 ```{r packages, echo = FALSE, message=FALSE, warning=FALSE,}
 library(readxl)
@@ -122,7 +122,7 @@ ggplot(data = london_boroughs_f_long, # the input data
 
 ```
 
-City of London, remains with the lowest rate of crime across all boroughs with only 14 offences per 1000 daytime inhabitants in 2013. In contrast, its neighbouring boroughs as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These boroughs are mainly located to the upper and lower side from the City of London. 
+City of London, remains with the lowest rate of crime across all boroughs with only 14 offences per 1000 daytime inhabitants in 2013. In contrast, its neighbouring boroughs as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These boroughs are mainly located to the upper and lower side from the City of London. 
 
 ```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate > 90 (2013)"}
 #plots the boroughs with highest crime rate of 100
@@ -137,7 +137,7 @@ ggplot(london_boroughs_f, aes(long, lat, group = group, fill=`2013`>90)) +
         axis.ticks = element_blank()) # remove axis ticks
 ```
 
-On average, boroughs have lowered their crime rates to 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rates are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
+On average, boroughs have lowered their crime rates to 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rate are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
 
 
 ```{r crime_rate_growth, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate growth from 2009 to 2013"}
