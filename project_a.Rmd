@@ -230,15 +230,27 @@ The following correlation analysis does not conclude that changes in one variabl
 
 ##Test of correlation 
 The following part will test the significant of the correlation between crime rates and other variables
-```{r}
-for (i in 1:length(var_list)){
-  cor_test <- cor.test(gb[[var_list[i]]], gb$crime_rate)
-  print(var_list[i])
-  print(cor_test)
-}
-cor.test(crime_ward$`Crime rate - 2013`,crime_ward$`Subjective well-being average score, 2013` )
 
+```{r}
+cor_test_pvalue <- c()
+cor_test_cor <- c()
+variable_name<-c("life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access", "subjective_well_being")
+for (i in seq(from = 9, to = 64, by= 5 )){
+  if (i != 29){
+  cor_test <- cor.test(crime_ward[[i]],crime_ward[[29]])
+  cor_test_pvalue <-c(cor_test_pvalue,(cor_test$p.value))
+  cor_test_cor <- c(cor_test_cor, (cor_test$estimate[[1]]))
+  }
+}
+
+cor_test_df <- data.frame(variable_name,cor_test_cor,cor_test_pvalue)
+cor_test_df <- cor_test_df %>% arrange(desc(cor_test_pvalue))
+cor_test_df
 ```
+
+
+
+
 
 
 ```{r}
