@@ -59,4 +59,6 @@ Unemployment rate has been historically linked to crime through prevalence of  a
 Issues
 - other factors (such as wage, policing, residential)
 - wards are small and cross-transit is common
+- public_transport positive relationship to crime
+
 
