@@ -3,8 +3,8 @@ title: "project_a"
 author: "maria"
 date: "9/20/2017"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 ```{r packages, echo = FALSE, message=FALSE, warning=FALSE,}
 library(readxl)
@@ -38,20 +38,15 @@ summary(crime_ward[,29])
 ```
 
 
-# Introduction
+## Introduction
 Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
-## Description
+## Dataset description
 Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
 
 ### Variables
-# Description
-Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
-
-# Variables
-
 
 ```{r, echo = FALSE}
 Variables <- read_excel("./Official_data/Variables.xlsx")[,1:3]
@@ -64,12 +59,12 @@ kable(Variables)
 
 ## Strength and limitations
 
+Some text needs to be added here
 
 ## Overview analysis
 ### Crime by borough
 
-From 2009 to 2013, the crime rates of all boroughs in London have decreased. As seen in the maps of figure x, the boroughs in the outskirts of London seem to have a lower crime rate than the boroughs in the center of London with exception to the City of London. 
-
+From 2009 to 2013, the crime rates of all boroughs in London have decreased. As seen in the maps of figure below, the boroughs in the outskirts of London seem to have a lower crime rate than the boroughs in the center of London with exception to the City of London. 
 
 ```{r crime_by_borough, message=FALSE, warning=FALSE, results='hide',echo=FALSE,fig.cap="Crime rate by borough from 2009 to 2013"}
 #selects relevant columns: borough (4) and all crime levels (25:29) and stores in crime_data_by_borough. Note boroughs are repeated because data is for wards
@@ -122,7 +117,7 @@ ggplot(data = london_boroughs_f_long, # the input data
 
 ```
 
-City of London, remains with the lowest rate of crime across all boroughs with only 14 offences per 1000 daytime inhabitants in 2013. In contrast, its neighbouring boroughs as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These boroughs are mainly located to the upper and lower side from the City of London. 
+City of London, remains with the lowest rate of crime across all boroughs with only 14 offences per 1,000 daytime inhabitants in 2013. In contrast, its neighbouring boroughs as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These boroughs are mainly located to the upper and lower side from the City of London. 
 
 ```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate > 90 (2013)"}
 #plots the boroughs with highest crime rate of 100
@@ -137,18 +132,17 @@ ggplot(london_boroughs_f, aes(long, lat, group = group, fill=`2013`>90)) +
         axis.ticks = element_blank()) # remove axis ticks
 ```
 
-On average, boroughs have lowered their crime rates to 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rate are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
+On average, boroughs have lowered their crime rates by 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rate are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
 
-
-```{r crime_rate_growth, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate growth from 2009 to 2013"}
+```{r crime_rate_growth, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Decrease of crime rates by borough from 2009 to 2013"}
 ggplot(data = london_boroughs_f, # the input data
        aes(x = long, y = lat, fill = growth, group = group)) + # define variables
   geom_polygon() + # plot the boroughs
   geom_path(colour="white", lwd=0.05) + # borough borders
-  ggtitle("Crime rate growth from 2009 to 2013 ") +
+  ggtitle("Decrease of crime rates by borough from 2009 to 2013 ") +
   coord_equal() + # fixed x and y scales
   scale_fill_gradient2(low = "#66BB6A",high = "#4CAF50", # colors
-                        name = "Growth (%)") + # legend options
+                        name = "Decrease (%)") + # legend options
   theme(axis.text = element_blank(), # change the theme options
         axis.title = element_blank(), # remove axis titles
         axis.ticks = element_blank()) # remove axis ticks
