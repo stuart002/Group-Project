@@ -243,23 +243,6 @@ cor.test(crime_ward$`Crime rate - 2013`,crime_ward$`Subjective well-being averag
 ```
 
 
-```{r}
-#the following loop can produce long table 
-var_list = c("life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
-
-crime_ward_long = data.frame()
-for (i in 1:length(var_list)) {
-  temp <- select(crime_ward, Ward, Borough, (i*5):(i*5+4))
-  colnames(temp)[3:7] <- c(2009:2013)
-  tidytemp <- gather_(temp, "year", var_list[i], colnames(temp)[3:7])
-  if (i==1) {
-    crime_ward_long <- tidytemp
-  } else {
-    crime_ward_long <- cbind(crime_ward_long, tidytemp[,4])
-  }
-}
-gb <- crime_ward_long %>% dplyr::group_by(year)
->>>>>>> 5557dbbaca3e8b012ebdd87cf1c914ec859e4b0d
 
 ```{r}
 # crime_ward_2013
@@ -268,18 +251,11 @@ colnames(crime_ward_2013) <- c("Ward", "Borough","life_expectancy","childhood_ob
 # the codes below define a function that allows you to make scatters boxplot with correlation on them
 # argument: col_name, string with double quotes, e.g. "unemployment_rate"
 cor_plot <- function(col_name) {
-<<<<<<< HEAD
   corr <- data.frame(r=round(cor(crime_ward_2013[[col_name]],crime_ward_2013[,"crime_rate"]),4))
   print(ggplot(crime_ward_2013,aes_string(x=col_name,y="crime_rate")) + geom_point(alpha=0.2) +
     geom_smooth(method = "lm") +
     geom_text(data=corr, aes(label=paste("r=",crime_rate,sep="")),x=quantile(crime_ward_2013[[col_name]],0.9),y=200) )
-=======
-  corr <- dplyr::summarise(gb,r=round(cor(!!sym(col_name),crime_rate),4))
-  print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.2)+
-    facet_wrap(~ year, nrow=2) +
-    geom_smooth(method="lm") +
-    geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[col_name]],0.9),y=270) )
->>>>>>> 5557dbbaca3e8b012ebdd87cf1c914ec859e4b0d
+
 }
 cor_plot("unemployment_rate")
 ```
