@@ -23,7 +23,7 @@ library(rgeos)
 
 ```
 
-#Analysing crime in London
+#Examining the relationship between crime rates and well-being in London
 
 ```{r, echo = FALSE}
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
