@@ -3,8 +3,8 @@ title: "project_a"
 author: "maria"
 date: "9/20/2017"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 ```{r packages, echo = FALSE, message=FALSE, warning=FALSE,}
 library(readxl)
