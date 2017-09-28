@@ -1,2 +1,0 @@
-"0","# Your code here"
-"0","ggplot(st) + geom_point(aes(x=pay ,y=SATV,col=""SATV"")) +  geom_point(aes(x=pay ,y=SATM,col=""SATM"")) + scale_y_continuous(name=""SAT score"") "
