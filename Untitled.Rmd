@@ -307,6 +307,9 @@ From the above scatter points in different years, weak-to-moderate negative rela
 This estimates use the latest three years of National Child Measurement Programme (NCMP) data combined. This means, the data in 2013 is the average of data in 2011, 2012, and 2013. In addition, children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese.
 
 An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
+
+At the same time, Sandy, Robert et al., 2013 work suggests that violent crimes alone seem to significantly increase children's weight. This seems to be due to the fact that the use of community areas is closely related to its safety. 
+
 Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation before actually conducting the analysis.
 
 ```{r}
@@ -324,7 +327,7 @@ The analysis results confirm our expectation based on the study conducted by An 
 It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
 
 ###Incapacity Benefit
-Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate.Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
+Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate. Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
 ```{r}
 cor_plot("incapacity_benefit")
 ```
