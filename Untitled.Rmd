@@ -399,9 +399,10 @@ In terms of public transport accessibility. There exists a clear moderate positi
 
 
 ##Correlation Matrix
-Finally, we study the correlation between any two variables we study by construsting a correlation matrix.
+Finally, we study the correlation between any two variables by construsting a correlation matrix. Before we get into , we notice that some of our independent variables are highly correlated, suggesting multicollinearity exists which can impact the model fits. 
+
 ```{r}
-cor_mat_df<-round(cor(select(crime_ward_2013, -Ward, -Borough)),4)
+cor_mat_df<-round(cor(select(crime_ward_2013, -Ward, -Borough, -home_access, -`well-being`, -deliberate_fires)),4)
 kable(cor_mat_df)
 
 ```
@@ -413,3 +414,9 @@ kable(cor_mat_df)
 ## Linear regression
 
 ## Conclusion and analysis
+
+
+#Bibliography
+Raphael, S. and Winter‐Ebmer, R. (2001). Identifying the Effect of Unemployment on Crime. The Journal of Law and Economics, 44(1), pp.259-283.
+
+Lochner, L. and Moretti, E. (2004). The Effect of Education on Crime: Evidence from Prison Inmates, Arrests, and Self-Reports. American Economic Review, 94(1), pp.155-189.
