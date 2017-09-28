@@ -13,11 +13,9 @@ library(dplyr)
 library(rlang)
 library(dplyr)
 library(tidyr)
-# BEGIN libraries for map !!! You might need to install these ones
 library(rgdal)
 library(plyr)
 library(rgeos)
-# END libraries for map
 
 ```
 
@@ -38,7 +36,7 @@ summary(crime_ward[,29])
 
 
 ## Introduction
-Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
+Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. Mayor theoretical and empirical work in criminology suggests a relation between levels in crime and wellbeing (Kawachi, Kennedy and Wilkinson, 1999). A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
@@ -47,13 +45,30 @@ Information on the 12 key indicators of well-being are given for 625 wards in Lo
 
 ### Variables
 
-```{r, echo = FALSE}
-Variables <- read_excel("./Official_data/Variables.xlsx")[,1:3]
-Variables[2:3,1] <- ""
-Variables[2:3,1] <- ""
-Variables[6,1] <- ""
-kable(Variables)
-```
+Category    | Variable            | 
+----------- | ------------------  | -----------------------------------------------
+Health      | Life Expectancy     | Reversed index of life-expectancies for a     
+-           | -                   | rolling 5-year period
+-           | Childhood obesity   | Prevalence of obesity by area of child residence
+-           | Incapacity benefits | Claimant rate of Incapacity Benefit or Severe
+-           | claimant rate       | Disablement Allowance
+Economic    | Unemployment rate   | Percent of working-age population claiming 
+Security    | -                   | Jobseeker's Allowance (JSA) or National
+-           | -                   | Insurance Credits
+Safety      | Crime rate          | Notifiable offences per 1,000 daytime pop.
+-           | Deliverate fires    | Deliberate fires per 1000 population
+Education   | GCSE point scores   | Average GCSE point scores
+Children    | Unauthorised pupil  | Absence in all maintained schools without 
+-           | absence             | permission from authorised representative of
+-           | -                   | the school
+Families    | Children in out of  | % of children dependent on a parent of guardian 
+-           | work households     | claiming out-of-work benefits
+Access      | Public transport    | Measure of the accessibility of a point to the 
+-           | Accessibility Score | public transport network
+Environment | Access to public    | Measure of proportion of area that is greenspace
+-           | open space          | and accessibility from homes
+Happiness   | Subjective well-    | Composite Score of Happiness, Life Satisfaction,
+-           | being avg score     | Worthwhileness and Anxiety
 
 
 ## Strength and limitations
@@ -276,7 +291,10 @@ cor_plot <- function(col_name) {
 ### Description
 These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
 ### Life Expectancy
-According to the data description provided by London datastore, rolling 5-year combined life expectancies instead of simple one-year life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year.
+According to the data description provided by London datastore, rolling 5-year combined life expectancies instead of simple one-year life expectancies are used for wards to reduce the effects of the variability in number of deaths in each year.
+
+In the past few years, violence has been started to be considered a publich health issue. Areas with high crime rates tend to have higher mortality rates from all causes as well (Kawachi, Kennedy and Wilkinson, 1999). 
+
 A study in 2015 reviewed that biological aging processes may be impacted by socioeconomic milieu, meaning that those who living in noisy area with high crime may have shorter cellular aging estimated by leukocyte telomere length (Park et al., 2015). Therefore, it is reasonable to estimate that a negative correlation between crime rate and life expectancy.
 
 
