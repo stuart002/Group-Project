@@ -34,8 +34,8 @@ summary(crime_ward[,29])
 ```
 
 ```{r}
-crime_ward_13 <- crime_ward[,c(3, 9, 14, 24, 29, 34, 39, 44, 49, 54, 59, 64)]
-names(crime_ward_13) <- c('ward', 'life_exp', 'child_ob', 'unemp', 'crime', 'fires', 'gcse', 'absence', 'out_of_work', 'public_trans', 'greenspace', 'well_being')
+crime_ward_13 <- crime_ward[,c(3, 9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64)]
+names(crime_ward_13) <- c('ward', 'life_exp', 'incap', 'child_ob', 'unemp', 'crime', 'fires', 'gcse', 'absence', 'out_of_work', 'public_trans', 'greenspace', 'well_being')
 ```
 
 Regression
@@ -47,12 +47,15 @@ library(stargazer)
 
 
 ```{r}
-lin_full <- lm(crime ~ life_exp + child_ob + unemp + crime + fires + gcse + absence + out_of_work + public_trans + greenspace , data = crime_ward_13)
+log_lin_full <- lm(log(crime + 1) ~ life_exp + child_ob + incap + unemp + gcse + absence + out_of_work + public_trans, data = crime_ward_13)
+lin_full <- lm(crime ~ life_exp + child_ob + incap + unemp +gcse + absence + out_of_work + public_trans, data = crime_ward_13)
 lin1 <- lm(crime ~ unemp + life_exp + absence + public_trans, data = crime_ward_13)
+log_lin1 <- lm(log(crime + 1) ~ unemp + life_exp + absence + public_trans, data = crime_ward_13)
+
 ```
 
 ```{r}
-stargazer(list(lin_full, lin1), type = 'text', digits = 2)
+stargazer(list(log_lin_full, log_lin1), type = 'text', digits = 2)
 ```
 Unemployment rate has been historically linked to crime through prevalence of  antisocial behaviour
 Issues
