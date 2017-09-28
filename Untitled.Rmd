@@ -308,7 +308,7 @@ This estimates use the latest three years of National Child Measurement Programm
 
 An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
 
-At the same time, Sandy, Robert et al., 2013 work suggests that violent crimes alone seem to significantly increase children's weight. This seems to be due to the fact that the use of community areas is closely related to its safety. 
+At the same time, Sandy, Robert et al., (2013) work suggests that violent crimes alone seem to significantly increase children's weight. This seems to be due to the fact that the use of community areas is closely related to its safety. 
 
 Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation before actually conducting the analysis.
 
