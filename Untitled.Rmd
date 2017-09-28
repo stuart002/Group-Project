@@ -170,7 +170,7 @@ ggplot(data = london_boroughs_f, # the input data
 ```
 ### Crime by ward
 
-An aspect of note regarding crime rates across wards, is that the majority of wards in London have a crime rate smaller than the mean. This aspect is illustrated on the histogram below, where, compared to the normal distribution, the crime rate data from 2013 is skewed towards the left. This will have furthur implications on possible regressions, to be examined furthur. 
+An aspect of note regarding crime rates across wards, is that the majority of wards in London have a crime rate smaller than the mean. This aspect is illustrated on the histogram below, where, compared to the normal distribution, the crime rate data from 2013 is skewed towards the left. This will have further implications on possible regressions, to be examined further. 
 
 ```{r, echo = FALSE}
 ggplot(crime_ward, aes(x = `Crime rate - 2013`)) + 
@@ -304,7 +304,7 @@ cor_plot <- function(col_name) {
 ```
 ## Correlations between crime rate and 3 health-related indexes
 ### Description
-These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
+These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obesity by area of child residence, and incapacity benefit or severe disablement allowance claimant rate.
 ### Life Expectancy
 According to the data description provided by London datastore, rolling 5-year combined life expectancies instead of simple one-year life expectancies are used for wards to reduce the effects of the variability in number of deaths in each year.
 
@@ -321,7 +321,7 @@ From the above scatter points in different years, weak-to-moderate negative rela
 ### Childhood Obesity
 This estimates use the latest three years of National Child Measurement Programme (NCMP) data combined. This means, the data in 2013 is the average of data in 2011, 2012, and 2013. In addition, children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese.
 
-An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
+An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examining 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
 Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation before actually conducting the analysis.
 
 ```{r}
@@ -336,18 +336,18 @@ cor_plot("childhood_obesity")
 
 Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a weak-to-moderate positive relationship, with Pearson r's range from 0.372 to 0.389.
 The analysis results confirm our expectation based on the study conducted by An et al. (2017).
-It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
+It is noticable that except for in the year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
 
 ###Incapacity Benefit
-Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate.Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
+Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate. Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
 ```{r}
 cor_plot("incapacity_benefit")
 ```
-Again crime rate and incapacity benefit rate have a moderate positive relationship according to Pearson r's range from 0.3917 to 0.4752 in different years.
-Although the maximum incapacity benefit rate decreased continously from around 15% in 2009 to around 5% in 2013, wards with highest incapacity benefit rates have relatively low crime rates in all 5 years.  
+Again, crime rate and incapacity benefit rate have a moderate positive relationship according to Pearson r's range from 0.3917 to 0.4752 in different years.
+Although the maximum incapacity benefit rate decreased continuously from around 15% in 2009 to around 5% in 2013, wards with highest incapacity benefit rates have relatively low crime rates in all 5 years.  
 A number of wards have relatively high crime rates while having similar incapacity benefit rates as other wards. This may indicate that crime rate correlates to not only incapacity benefit but also other variables.
 
-In conclusion, moderate correlations are found between crime rate and three health-related rates. The moderate correlations may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. Many outliers, shown on the the above boxplots, may greatly affect the result of the correlation between crime rate and other variable.
+In conclusion, moderate correlations are found between crime rate and three health-related rates. The moderate correlations may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. Many outliers, shown on the above boxplots, may greatly affect the result of the correlation between crime rate and other variable.
 
 ###Unemployment Rate
 Unemployment rate here refers to percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people so presumably the percentage can be used to estimate unemployment rate. 
@@ -359,7 +359,7 @@ cor_plot("unemployment_rate")
 Our scatter plot shows moderate positive correlation between the two variables, which confirmed our hypothesis. The wards with higher unemployment rates are likely to have higher crime rates. 
 
 ###Education (GCSE Score and Unauthorised Pupil Absence)
-GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. Unauthorised Absence is absence without permission from a teacher or other authorised representative of the school. Wards with higher GCSE scores and lower unauthorised pupil absence suggect higher education well-being. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
+GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. Unauthorised Absence is absence without permission from a teacher or other authorised representative of the school. Wards with higher GCSE scores and lower unauthorised pupil absence suggest higher education well-being. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
 
 ```{r}
 # correlation between GCSE & unauthorised pupil absence
@@ -371,11 +371,11 @@ The research of Lochner and Moretti (2004) shows that schooling significantly re
 cor_plot("GCSE_point")
 cor_plot("unauthorised_absence")
 ```
-As we can see from the scatters, the relationships are consistant from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
+As we can see from the scatters, the relationships are consistent from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
 
 ### Dependent children
 
-Dependent childing shows the percentage of children living in out-of-work benefit claimant households. A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
+Dependent children shows the percentage of children living in out-of-work benefit claimant households. A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
 ```{r}
 # plot children varialbes
 cor_plot("dependent_children")
@@ -386,7 +386,7 @@ cor_plot("dependent_children")
 ```{r}
 cor_plot("deliberate_fires")
 ```
-The correlation between crime rate and figure of deliberate fires per 1000 population is very weak throught the 5 years, correlation figure fluctuates around 0.13. Although deliberate fire expects to be a great indicator, as this directly relates to crime rate; the correlation figure shows a weak relationship. It is sugguested to have further investigations of this factor
+The correlation between crime rate and figure of deliberate fires per 1000 population is very weak throughout the 5 years, correlation figure fluctuates around 0.13. Although deliberate fire expects to be a great indicator, as this directly relates to crime rate; the correlation figure shows a weak relationship. It is suggested to have further investigations of this factor
 
 
 ### Environment (Access to public open space and nature	Measure of proportion of area that is greenspace and accessibility from homes)
@@ -411,7 +411,7 @@ In terms of public transport accessibility. There exists a clear moderate positi
 
 
 ##Correlation Matrix
-Finally, we study the correlation between any two variables we study by construsting a correlation matrix.
+Finally, we study the correlation between any two variables we study by constructing a correlation matrix.
 ```{r}
 cor_mat_df<-round(cor(select(crime_ward_2013, -Ward, -Borough)),4)
 kable(cor_mat_df)
