@@ -1,0 +1,11 @@
+"0","print(paste0(""Correlation between the variables `dollars` and `SATV` is "", round(cor_dol_v,2)))
+"
+"1","[1]"
+"1"," ""Correlation between the variables `dollars` and `SATV` is -0.53"""
+"1","
+"
+"0","print(paste0(""Correlation between the variables `dollars` and `SATM` is "", round(cor_dol_m,2)))"
+"1","[1]"
+"1"," ""Correlation between the variables `dollars` and `SATM` is -0.48"""
+"1","
+"
