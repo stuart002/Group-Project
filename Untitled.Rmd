@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 title: "project_aa"
 author: "maria"
 date: "9/20/2017"
@@ -19,7 +24,7 @@ library(rgeos)
 
 ```
 
-#Analysing crime in London
+#Examining the relationship between crime rates and well-being in London
 
 ```{r, echo = FALSE}
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
