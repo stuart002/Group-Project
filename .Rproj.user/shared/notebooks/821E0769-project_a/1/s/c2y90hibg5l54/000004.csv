@@ -1,0 +1,5 @@
+"0","crime <- read_excel(""/Users/kerstinparlander/Documents/Imperial/M_SFA/Project/london-ward-well-being-probability-scores.xls"", sheet = ""Data"")
+"
+"2","Error in sheets_fun(path) : 
+  path[1]=""/Users/kerstinparlander/Documents/Imperial/M_SFA/Project/london-ward-well-being-probability-scores.xls"": No such file or directory
+"

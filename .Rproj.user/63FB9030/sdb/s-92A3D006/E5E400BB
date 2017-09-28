@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1506345210937.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E5E400BB",
+    "lastKnownWriteTime" : 6,
+    "last_content_update" : 1506345210937,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "75B06CA6",
+        "caption" : "london_boroughs_f",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=london_boroughs_f&cache_key=75B06CA6",
+        "displayedObservations" : 1102,
+        "environment" : "",
+        "object" : "london_boroughs_f",
+        "preview" : 0,
+        "totalObservations" : 1102,
+        "variables" : 21
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
