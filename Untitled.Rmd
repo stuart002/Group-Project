@@ -254,13 +254,13 @@ The scatter plot shows the average crime rate (over the 5 years) across each bor
 
 
 # Correlation Analysis
-The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other rates.The correlation coefficient ranges from −1 to +1, and a stronger relationship between two variables as a larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
+The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other factors. The correlation coefficient ranges from −1 to +1, and a stronger relationship between the two variables translates into a larger absolute value of the coefficient. A positive coefficient means both variables tend to increase or decrease together whereas a negative coefficient means that the two variables move in opposite directions (Zhou et al., 2016).
 
-The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal;however, these will be answered in the regression part.
+The following analysis does not conclude whether the relationship between the two variables is causal of nature as this question will be addressed in the regression section.
 
 
 ##Test of correlation 
-The following part will test the significant of the correlation between crime rates and other variables.
+The following table denotes the correlation between crime rates and several indicators of well-being along with their corresponding significance.
 
 ```{r}
 cor_test_pvalue <- c()
@@ -284,8 +284,7 @@ kable(cor_test_df)
 
 We would like to examine whether the correlation between crime rate and one of the other variables is significant by comparing the p-value to a certain significance level, denoted α. 
 
-The significance level refers to a certain degree of risk of concluding that a diffrence exists while in fact there is no diffrence. We belive a significance level of 0.05 is fair enough for this report. Therefore, if the p-value of a correlation test is less than or equal to α, we would conclude that the correlation is statistically significant and would be further discussed.
-
+The significance level refers to the risk associated with concluding a significant relationship when in fact there is none. A standard of a 95 per cent confidence interval will be used throughout this report as we believe this level to be scientifically robust and fair. Therefore, if the p-value of a correlation test is less than or equal to α, we would conclude that the correlation is statistically significant and the variable will be included in further discussion.
 
 
 ```{r}
