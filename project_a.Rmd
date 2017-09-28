@@ -224,13 +224,13 @@ The scatter plot shows the average crime rate (over the 5 years) across each bor
 
 
 # Correlation Analysis
-The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one other rates.The correlation coefficient ranges from −1 to +1, and stronger relationship between two variables as larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
+The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other rates.The correlation coefficient ranges from −1 to +1, and a stronger relationship between two variables as a larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
 
-The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal.
+The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal;however, these will be answered in the regression part.
 
 
 ##Test of correlation 
-The following part will test the significant of the correlation between crime rates and other variables
+The following part will test the significant of the correlation between crime rates and other variables.
 
 ```{r}
 cor_test_pvalue <- c()
@@ -246,9 +246,15 @@ for (i in seq(from = 9, to = 64, by= 5 )){
 
 cor_test_df <- data.frame(variable_name,cor_test_cor,cor_test_pvalue)
 cor_test_df <- cor_test_df %>% arrange(desc(cor_test_pvalue))
-cor_test_df
+names(cor_test_df)[1]<-paste("Variable Name")
+names(cor_test_df)[2]<-paste("Correlation Coefficient")
+names(cor_test_df)[3]<-paste("P-Value")
+kable(cor_test_df)
 ```
 
+We would like to examine whether the correlation between crime rate and one of the other variables is significant by comparing the p-value to a certain significance level, denoted α. 
+
+The significance level refers to a certain degree of risk of concluding that a diffrence exists while in fact there is no diffrence. We belive a significance level of 0.05 is fair enough for this report. Therefore, if the p-value of a correlation test is less than or equal to α, we would conclude that the correlation is statistically significant and would be further discussed.
 
 
 
@@ -362,6 +368,25 @@ It is clearly seen from the graph x that there is almost no correlation between 
 cor_plot("public_transport")
 ```
 In terms of public transport accessibility. There exists a clear moderate positive relationship with an increasing trend. for example, the correlation figure was 0.3784 in 2009, gradually increased to 0.4585 in 2012. Overall, the correlation figure remains around 0.42. The higher public transport accessibility people have, the crime rate tends to be higher. 
+
+
+
+
+
+
+
+
+
+
+##Correlation Matrix
+Finally, we study the correlation between any two variables we study by construsting a correlation matrix.
+```{r}
+cor_mat_df<-round(cor(select(crime_ward_2013, -Ward, -Borough)),4)
+kable(cor_mat_df)
+
+```
+
+
 
 
 	
