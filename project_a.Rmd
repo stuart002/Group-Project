@@ -13,6 +13,7 @@ library(knitr)
 library(dplyr)
 library(rlang)
 library(dplyr)
+library(ggplot2)
 library(tidyr)
 # BEGIN libraries for map !!! You might need to install these ones
 library(rgdal)
@@ -22,7 +23,7 @@ library(rgeos)
 
 ```
 
-#Analysing crime in London
+#Examining the relationship between crime rates and well-being in London
 
 ```{r, echo = FALSE}
 crime <- read_excel("Official_data/london-ward-well-being-probability-scores.xls", sheet = "Data")
@@ -43,10 +44,22 @@ Modern policy regarding crime rate has transitioned to a focus on preventative m
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
+<<<<<<< HEAD
+##Description
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
+
+###Variables
+#Description
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
+
+#Variables
+
+=======
 ## Dataset description
 Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
 
 ### Variables
+>>>>>>> 7a74c1211391c752b51bb834c995e12e0141a878
 
 ```{r, echo = FALSE}
 Variables <- read_excel("./Official_data/Variables.xlsx")[,1:3]
@@ -57,7 +70,7 @@ kable(Variables)
 ```
 
 
-## Strength and limitations
+##Strength and limitations
 
 Some text needs to be added here
 
@@ -150,17 +163,43 @@ ggplot(data = london_boroughs_f, # the input data
 
 ### Crime historically
 
-###AMR###
+##Theory
 
-###TEXT: added some intro text. Check with Maria if it is needed for report###
-Crime, in general, is very hard to measure and as in various big cities around the world, measuring crime in London is no easy task. Police statistics is usually the only measure to local crime. However, police crime figures are not always accurate as they tend to understate recorded crime statistics. Accordingly, crime statistics needs to be investigated with caution; sometimes data from hospitals intakes or victim surveys infer very different theories. Geographically, London is divided into 32 boroughs and each borough consists of multiple wards. During our analysis, we will look at crimes rates across the 32 boroughs along 5 years; from 2009 till 2013.
+##Correlations
+###Correlations with crime rate
 
-Analyzing crime data across London benefit both the governmental organizations and the individuals. For example, organizations can use the data to implement better services and check for core reasons why crime in one area is higher than the other, while, individuals can utilize this data to make calculated decisions on where to buy or rent a house in London. 
+#Theory
 
-Our dataset measures the well-being scores across all London's wards. In our analysis, we will look at how different factors affect crime rates in different areas, such as how do unemployment rate affect crime rates or how GSCE test score relate to the crime rates. We will investigate the relationship between crime and different factors using linear regression tests and other statistical tests such as hypothesis test.
-###TEXT###
-
+#Correlations
 ```{r}
+<<<<<<< HEAD
+#the following codes can produce long table and plots with correlations on them
+# correlation part not finished
+var_list = c("childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
+
+crime_ward_long = data.frame()
+for (i in 1:length(var_list)) {
+  temp <- select(crime_ward, Ward, Borough, (i*5+5):(i*5+9))
+  colnames(temp)[3:7] <- c(2009:2013)
+  tidytemp <- gather_(temp, "year", var_list[i], colnames(temp)[3:7])
+  if (i==1) {
+    crime_ward_long <- tidytemp
+  } else {
+    crime_ward_long <- cbind(crime_ward_long, tidytemp[,4])
+  }
+}
+gb <- crime_ward_long %>% dplyr::group_by(year)
+for (item in var_list) {
+  if (item!="crime_rate") {
+    corr <- dplyr::summarise(gb,r=round(cor(!!sym(item),crime_rate),4))
+    print(ggplot(crime_ward_long,aes_string(x=item,y="crime_rate"))+geom_point(alpha=0.5)+
+      facet_wrap(~ year, nrow=2) +
+      geom_smooth() +
+      geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[item]],0.9),y=270) )
+  }
+}
+
+=======
 
 # selects relevant data from the whole dataset. Borough and crime rate on each of the 5 years.
 crime_by_year <- crime_borough[, c(4, 25:29)]
@@ -224,39 +263,54 @@ The scatter plot shows the average crime rate (over the 5 years) across each bor
 
 
 # Correlation Analysis
-The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one other rates.The correlation coefficient ranges from −1 to +1, and stronger relationship between two variables as larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
+The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other rates.The correlation coefficient ranges from −1 to +1, and a stronger relationship between two variables as a larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
 
-The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal.
+The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal;however, these will be answered in the regression part.
+
+
+##Test of correlation 
+The following part will test the significant of the correlation between crime rates and other variables.
 
 ```{r}
-#the following loop can produce long table 
-var_list = c("life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
-
-crime_ward_long = data.frame()
-for (i in 1:length(var_list)) {
-  temp <- select(crime_ward, Ward, Borough, (i*5):(i*5+4))
-  colnames(temp)[3:7] <- c(2009:2013)
-  tidytemp <- gather_(temp, "year", var_list[i], colnames(temp)[3:7])
-  if (i==1) {
-    crime_ward_long <- tidytemp
-  } else {
-    crime_ward_long <- cbind(crime_ward_long, tidytemp[,4])
+cor_test_pvalue <- c()
+cor_test_cor <- c()
+variable_name<-c("life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access", "subjective_well_being")
+for (i in seq(from = 9, to = 64, by= 5 )){
+  if (i != 29){
+  cor_test <- cor.test(crime_ward[[i]],crime_ward[[29]])
+  cor_test_pvalue <-c(cor_test_pvalue,(cor_test$p.value))
+  cor_test_cor <- c(cor_test_cor, (cor_test$estimate[[1]]))
   }
 }
-gb <- crime_ward_long %>% dplyr::group_by(year)
 
+cor_test_df <- data.frame(variable_name,cor_test_cor,cor_test_pvalue)
+cor_test_df <- cor_test_df %>% arrange(desc(cor_test_pvalue))
+names(cor_test_df)[1]<-paste("Variable Name")
+names(cor_test_df)[2]<-paste("Correlation Coefficient")
+names(cor_test_df)[3]<-paste("P-Value")
+kable(cor_test_df)
 ```
+
+We would like to examine whether the correlation between crime rate and one of the other variables is significant by comparing the p-value to a certain significance level, denoted α. 
+
+The significance level refers to a certain degree of risk of concluding that a diffrence exists while in fact there is no diffrence. We belive a significance level of 0.05 is fair enough for this report. Therefore, if the p-value of a correlation test is less than or equal to α, we would conclude that the correlation is statistically significant and would be further discussed.
+
+
+
 ```{r}
+# crime_ward_2013
+crime_ward_2013 <- crime_ward[,c(3,4,seq(9,64,5))]
+colnames(crime_ward_2013) <- c("Ward", "Borough","life_expectancy","childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access","well-being")
 # the codes below define a function that allows you to make scatters boxplot with correlation on them
 # argument: col_name, string with double quotes, e.g. "unemployment_rate"
 cor_plot <- function(col_name) {
-  corr <- dplyr::summarise(gb,r=round(cor(!!sym(col_name),crime_rate),4))
-  print(ggplot(crime_ward_long,aes_string(x=col_name,y="crime_rate"))+geom_point(alpha=0.2)+
-    facet_wrap(~ year, nrow=2) +
-    geom_smooth() +
-    geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(gb[[col_name]],0.9),y=270) )
+  corr <- data.frame(r=round(cor(crime_ward_2013[[col_name]],crime_ward_2013[,"crime_rate"]),4))
+  print(ggplot(crime_ward_2013,aes_string(x=col_name,y="crime_rate")) + geom_point(alpha=0.2) +
+    geom_smooth(method = "lm") +
+    geom_text(data=corr, aes(label=paste("r=",crime_rate,sep="")),x=quantile(crime_ward_2013[[col_name]],0.9),y=200) )
+
 }
-# cor_plot("unemployment_rate")
+# example: cor_plot("unemployment_rate")
 ```
 ## Correlations between crime rate and 3 health-related indexes
 ### Description
@@ -268,20 +322,28 @@ A study in 2015 reviewed that biological aging processes may be impacted by soci
 
 ```{r}
 cor_plot("life_expectancy")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
+>>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 ```
-From the above scatter points in different years, weak-to-moderate negative relationship between crime rate and life expectancy can be found, with Pearson r from -0.3631 to 0.4545 in 5 different years. Also, a significant portion of points are far from the smooth line indicates only a moderate linear relationship between the variables.
 
-### Childhood Obesity
-This estimates use the latest three years of National Child Measurement Programme (NCMP) data combined. This means, the data in 2013 is the average of data in 2011, 2012, and 2013. In addition, children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese.
 
+<<<<<<< HEAD
+##Correlations between crime rate and 3 health-related indexes
+###Description
+These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
+=======
 An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
 Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation before actually conducting the analysis.
 
 ```{r}
 cor_plot("childhood_obesity")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
+
+
+
+
+
+
+
 Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a weak-to-moderate positive relationship, with Pearson r's range from 0.372 to 0.389.
 The analysis results confirm our expectation based on the study conducted by An et al. (2017).
 It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
@@ -290,91 +352,138 @@ It is noticebaly that expect for in year 2013, wards that have extremely high ch
 Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate.Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
 ```{r}
 cor_plot("incapacity_benefit")
-ggplot(gb, aes(x=cut(childhood_obesity, breaks =20), y=crime_rate))+geom_boxplot()+facet_wrap(~year)
 ```
 Again crime rate and incapacity benefit rate have a moderate positive relationship according to Pearson r's range from 0.3917 to 0.4752 in different years.
 Although the maximum incapacity benefit rate decreased continously from around 15% in 2009 to around 5% in 2013, wards with highest incapacity benefit rates have relatively low crime rates in all 5 years.  
 A number of wards have relatively high crime rates while having similar incapacity benefit rates as other wards. This may indicate that crime rate correlates to not only incapacity benefit but also other variables.
+>>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 
-In conclusion, moderate correlations are found between crime rate and three health-related rates. The moderate correlations may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. Many outliers, shown on the the above boxplots, may greatly affect the result of the correlation between crime rate and other variable.
+Rolling 5-year combined life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year. Index scores were reversed so higher life expectancy equals better well-being. 
+Source: ONS mortality data and GLA population projections, GLA Calculations.
 
-###unemployment_rate
-Unemployment rate here refers to percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people. 
-Intuitively, unemployment rate and crime rate should be positively correlated. Our scatter plot shows moderate positive correlation between the two variables, which confirmed our hypothesis. We can also find more extreme values for unemployment rate with time passing, although those increased unemployment are not necessarily associated with increased crime rate. 
+<<<<<<< HEAD
+"Prevalence of obesity by area of child residence. The estimates use the latest three years of NCMP data combined eg '2013' covers 2010/11 to 2012/13. Children with a BMI greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. Earliest data available is 2008/09 to 2010/11, which has been used for 2009-2011.
+Source: National Obesity Observatory"					
+=======
+###Unemployment Rate
+Unemployment rate here refers to percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people so presumably the percentage can be used to estimate unemployment rate. 
+A study found significantly positive effects of unemployment on property crime rates using US state data (Raphael and Winter‐Ebmer, 2001). Although we do not have crime rate data of different types of crimes (i.e. property crime), we expect the relation of crime rate in general and unemployment rate to be positively correlated.
+>>>>>>> e7bc4b8e6c59f486b07b426bd4ba7595a7259d73
 
+"Incapacity Benefit or Severe Disablement Allowance claimant rate. 
+Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
+Source: IB/SDA from DWP, Population from GLA projections."
+###basic data selecting
 ```{r}
+<<<<<<< HEAD
+#read all the names of columns
+crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
+crime_health[,3:18] <- sapply(crime_health[,3:18], as.numeric)
+crime_health <- mutate(crime_health, `Childhood Obesity 2009-2013`=(`Childhood Obesity 2009`+`Childhood Obesity 2010`+`Childhood Obesity 2011`+`Childhood Obesity 2012`+`Childhood Obesity 2013`)/5)
+crime_health <- mutate(crime_health, `Incapacity Benefit rate - 2009-2013`=(`Incapacity Benefit rate - 2009`+`Incapacity Benefit rate - 2010`+`Incapacity Benefit rate - 2011`+`Incapacity Benefit rate - 2012`+`Incapacity Benefit rate - 2013`)/5)
+crime_health <- mutate(crime_health, `Crime rate - 2009-2013`=(`Crime rate - 2009`+`Crime rate - 2010`+`Crime rate - 2011`+`Crime rate - 2012`+`Crime rate - 2013`)/5)
+
+crime_health1 <- select(crime_health, -(`Childhood Obesity 2009`:`Crime rate - 2013`))
+=======
 cor_plot("unemployment_rate")
 ```
+<<<<<<< HEAD
 We also expect areas with considerately dense population (i.e. inner London) may potentially have more crimes even if the general employment rate are similar to suburban areas. If we split boroughs into inner and outer London, we can see employment and crime rate show only weak correlations of around 0.2 for innter London but stronger correlations (0.58-0.62) for outer London boroughs. 
 ```{r}
 # split borough into inner and outer
 desig <- read.csv("./Official_data/borough_desig.csv")
-crime_ward_long_desig <- merge(crime_ward_long[2:nrow(crime_ward_long),],desig,by="Borough")
-inner_ward <- crime_ward_long_desig%>% filter(Designation=="Inner")
-outer_ward <- crime_ward_long_desig%>% filter(Designation=="Outer")
-corr <- inner_ward%>% group_by(year)%>%
-  dplyr::summarise(r=round(cor(unemployment_rate,crime_rate),4))
+crime_ward_2013_desig <- merge(crime_ward_2013[2:nrow(crime_ward_2013),],desig,by="Borough")
+inner_ward <- crime_ward_2013_desig%>% filter(Designation=="Inner")
+outer_ward <- crime_ward_2013_desig%>% filter(Designation=="Outer")
+corr <- data.frame(r=round(cor(inner_ward[,"unemployment_rate"],inner_ward[,"crime_rate"]),4))
 ggplot(inner_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
-  facet_wrap(~ year, nrow=2) +
-  geom_smooth() +
-  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(inner_ward$unemployment_rate,0.9),y=250) 
+  geom_smooth(method="lm") +
+  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(inner_ward$unemployment_rate,0.9),y=200) 
 
-corr <- outer_ward%>% group_by(year)%>%
-  dplyr::summarise(r=round(cor(unemployment_rate,crime_rate),4))
+corr <- data.frame(r=round(cor(outer_ward[,"unemployment_rate"],outer_ward[,"crime_rate"]),4))
 ggplot(outer_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
-  facet_wrap(~ year, nrow=2) +
-  geom_smooth() +
-  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(outer_ward$unemployment_rate,0.9),y=250) 
+  geom_smooth(method="lm") +
+  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(outer_ward$unemployment_rate,0.9),y=200)
 
-mean_desig <- crime_ward_long_desig%>% group_by(Designation)  %>% dplyr::summarise(avg_crime=mean(crime_rate))
+mean_desig <- crime_ward_2013_desig%>% group_by(Designation)  %>% dplyr::summarise(avg_crime=mean(crime_rate))
 mean_desig
+>>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 ```
-## Education
-GCSE scores and Unauthorised Pupil Absence are used to represent education well-being in our data. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
+=======
+Our scatter plot shows moderate positive correlation between the two variables, which confirmed our hypothesis. The wards with higher unemployment rates are likely to have higher crime rates. 
 
+###Education (GCSE Score and Unauthorised Pupil Absence)
+GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. Unauthorised Absence is absence without permission from a teacher or other authorised representative of the school. Wards with higher GCSE scores and lower unauthorised pupil absence suggect higher education well-being. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
+>>>>>>> e7bc4b8e6c59f486b07b426bd4ba7595a7259d73
+
+###Correlation Analysis
 ```{r}
+<<<<<<< HEAD
+names(crime_health1)
+crime_health2 <- crime_health1[, c(6,3,4,5)]
+cor(crime_health2)
+=======
 # correlation between GCSE & unauthorised pupil absence
-cor(crime_ward_long$GCSE_point, crime_ward_long$unauthorised_absence)
+cor(crime_ward_2013$GCSE_point, crime_ward_2013$unauthorised_absence)
 ```
-Correlations between education variables and crime rate are relatively weaker compared with unemployment. We also notice from the scatter that GCSE score has increased while unauthorised pupil absence has decreased from 2009 to 2013, indicating general education well-being has been improved in London's education. 
+The research of Lochner and Moretti (2004) shows that schooling significantly reduces criminal activity. We expect to see a negative relationship between GCSE score and crime rate but a positive relationship between unauthorised pupil absence. 
 ```{r}
 # plot education varialbes
 cor_plot("GCSE_point")
 cor_plot("unauthorised_absence")
 ```
+As we can see from the scatters, the relationships are consistant from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
+
 ### Dependent children
+>>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 
-Dependent childing shows the percentage of children living in out-of-work benefit claimant households. A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
+```
+###Plots
 ```{r}
-# plot children varialbes
-cor_plot("dependent_children")
+ggplot(crime_health2, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+ggplot(crime_health2, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+ggplot(crime_health2, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
+
+ggplot(crime_health2, aes(x=cut(`Life Expectancy 2009-13`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+ggplot(crime_health2, aes(x=cut(`Childhood Obesity 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+ggplot(crime_health2, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
+
+```
+  
+  
+  
+  
+  
+
+  
+
+<<<<<<< HEAD
+##Linear regression
+=======
+
+
+
+
+
+
+
+
+##Correlation Matrix
+Finally, we study the correlation between any two variables we study by construsting a correlation matrix.
+```{r}
+cor_mat_df<-round(cor(select(crime_ward_2013, -Ward, -Borough)),4)
+kable(cor_mat_df)
+
 ```
 
-# corr analysis last part
-### deliberate_fires
-```{r}
-cor_plot("deliberate_fires")
-```
-The correlation between crime rate and figure of deliberate fires per 1000 population is very weak throught the 5 years, correlation figure fluctuates around 0.13. Although deliberate fire expects to be a great indicator, as this directly relates to crime rate; the correlation figure shows a weak relationship. It is sugguested to have further investigations of this factor
 
-
-### Environment (Access to public open space and nature	Measure of proportion of area that is greenspace and accessibility from homes)
-```{r}
-cor_plot("home_access")
-```
-It is clearly seen from the graph x that there is almost no correlation between crime rate and environment, the correlation figures remained extremely low across 5 years. In common sense, we may expect the environment could be a potential drive of leading committing a crime, the result proves that people tend to be rational with their actions regardless of their surrounding environment
-
-### Access	Public Transport Accessibility Scores	Measure of the accessibility of a point to the public transport network
-```{r}
-cor_plot("public_transport")
-```
-In terms of public transport accessibility. There exists a clear moderate positive relationship with an increasing trend. for example, the correlation figure was 0.3784 in 2009, gradually increased to 0.4585 in 2012. Overall, the correlation figure remains around 0.42. The higher public transport accessibility people have, the crime rate tends to be higher. 
 
 
 	
 ## Linear regression
+>>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 
-## Conclusion and analysis
+##Conclusion and analysis
 
 
 
