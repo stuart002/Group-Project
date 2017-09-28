@@ -311,46 +311,30 @@ A number of wards have relatively high crime rates while having similar incapaci
 
 In conclusion, moderate correlations are found between crime rate and three health-related rates. The moderate correlations may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. Many outliers, shown on the the above boxplots, may greatly affect the result of the correlation between crime rate and other variable.
 
-###unemployment_rate
-Unemployment rate here refers to percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people. 
-Intuitively, unemployment rate and crime rate should be positively correlated. Our scatter plot shows moderate positive correlation between the two variables, which confirmed our hypothesis. We can also find more extreme values for unemployment rate with time passing, although those increased unemployment are not necessarily associated with increased crime rate. 
+###Unemployment Rate
+Unemployment rate here refers to percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people so presumably the percentage can be used to estimate unemployment rate. 
+A study found significantly positive effects of unemployment on property crime rates using US state data (Raphael and Winter‐Ebmer, 2001). Although we do not have crime rate data of different types of crimes (i.e. property crime), we expect the relation of crime rate in general and unemployment rate to be positively correlated.
 
 ```{r}
 cor_plot("unemployment_rate")
 ```
-We also expect areas with considerately dense population (i.e. inner London) may potentially have more crimes even if the general employment rate are similar to suburban areas. If we split boroughs into inner and outer London, we can see employment and crime rate show only weak correlations of around 0.2 for innter London but stronger correlations (0.58-0.62) for outer London boroughs. 
-```{r}
-# split borough into inner and outer
-desig <- read.csv("./Official_data/borough_desig.csv")
-crime_ward_2013_desig <- merge(crime_ward_2013[2:nrow(crime_ward_2013),],desig,by="Borough")
-inner_ward <- crime_ward_2013_desig%>% filter(Designation=="Inner")
-outer_ward <- crime_ward_2013_desig%>% filter(Designation=="Outer")
-corr <- data.frame(r=round(cor(inner_ward[,"unemployment_rate"],inner_ward[,"crime_rate"]),4))
-ggplot(inner_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
-  geom_smooth(method="lm") +
-  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(inner_ward$unemployment_rate,0.9),y=200) 
+Our scatter plot shows moderate positive correlation between the two variables, which confirmed our hypothesis. The wards with higher unemployment rates are likely to have higher crime rates. 
 
-corr <- data.frame(r=round(cor(outer_ward[,"unemployment_rate"],outer_ward[,"crime_rate"]),4))
-ggplot(outer_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
-  geom_smooth(method="lm") +
-  geom_text(data=corr, aes(label=paste("r=",r,sep="")),x=quantile(outer_ward$unemployment_rate,0.9),y=200)
-
-mean_desig <- crime_ward_2013_desig%>% group_by(Designation)  %>% dplyr::summarise(avg_crime=mean(crime_rate))
-mean_desig
-```
-## Education
-GCSE scores and Unauthorised Pupil Absence are used to represent education well-being in our data. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
+###Education (GCSE Score and Unauthorised Pupil Absence)
+GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. Unauthorised Absence is absence without permission from a teacher or other authorised representative of the school. Wards with higher GCSE scores and lower unauthorised pupil absence suggect higher education well-being. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
 
 ```{r}
 # correlation between GCSE & unauthorised pupil absence
 cor(crime_ward_2013$GCSE_point, crime_ward_2013$unauthorised_absence)
 ```
-Correlations between education variables and crime rate are relatively weaker compared with unemployment. We also notice from the scatter that GCSE score has increased while unauthorised pupil absence has decreased from 2009 to 2013, indicating general education well-being has been improved in London's education. 
+The research of Lochner and Moretti (2004) shows that schooling significantly reduces criminal activity. We expect to see a negative relationship between GCSE score and crime rate but a positive relationship between unauthorised pupil absence. 
 ```{r}
 # plot education varialbes
 cor_plot("GCSE_point")
 cor_plot("unauthorised_absence")
 ```
+As we can see from the scatters, the relationships are consistant from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
+
 ### Dependent children
 
 Dependent childing shows the percentage of children living in out-of-work benefit claimant households. A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
