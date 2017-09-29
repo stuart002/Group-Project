@@ -214,6 +214,8 @@ ggplot(crime_by_year, aes(Borough, Crime_Rate_2013)) +
 
 ###Ask Valeria on how to put the 5 plots on one plot (just like the maps one)###
 
+
+
 summary(crime_by_year)
 
 
@@ -240,7 +242,7 @@ The scatter plot shows the average crime rate (over the 5 years) across each bor
 # Correlation Analysis
 The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other rates.The correlation coefficient ranges from −1 to +1, and a stronger relationship between two variables as a larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negetive coefficient means two variables have opposite directions (Zhou et al., 2016).
 
-The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in creime rate cause in other variable. This analysis will not tell whether a relationship is causal;however, these will be answered in the regression part.
+The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or changes in crime rate cause in other variable. This analysis will not tell whether a relationship is causal;however, these will be answered in the regression part.
 
 
 ##Test of correlation 
