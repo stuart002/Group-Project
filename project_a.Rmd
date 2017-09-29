@@ -172,7 +172,6 @@ ggplot(data = london_boroughs_f, # the input data
 
 #Correlations
 ```{r}
-<<<<<<< HEAD
 #the following codes can produce long table and plots with correlations on them
 # correlation part not finished
 var_list = c("childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
@@ -199,7 +198,6 @@ for (item in var_list) {
   }
 }
 
-=======
 
 # selects relevant data from the whole dataset. Borough and crime rate on each of the 5 years.
 crime_by_year <- crime_borough[, c(4, 25:29)]
@@ -278,8 +276,8 @@ variable_name<-c("life_expectancy","childhood_obesity","incapacity_benefit","une
 for (i in seq(from = 9, to = 64, by= 5 )){
   if (i != 29){
   cor_test <- cor.test(crime_ward[[i]],crime_ward[[29]])
-  cor_test_pvalue <-c(cor_test_pvalue,(cor_test$p.value))
-  cor_test_cor <- c(cor_test_cor, (cor_test$estimate[[1]]))
+  cor_test_pvalue <-c(cor_test_pvalue,round((cor_test$p.value),4))
+  cor_test_cor <- c(cor_test_cor, (round(cor_test$estimate[[1]],4)))
   }
 }
 
@@ -294,6 +292,7 @@ kable(cor_test_df)
 We would like to examine whether the correlation between crime rate and one of the other variables is significant by comparing the p-value to a certain significance level, denoted α. 
 
 The significance level refers to a certain degree of risk of concluding that a diffrence exists while in fact there is no diffrence. We belive a significance level of 0.05 is fair enough for this report. Therefore, if the p-value of a correlation test is less than or equal to α, we would conclude that the correlation is statistically significant and would be further discussed.
+
 We then remove subjective well-being score and the proportion of accessing to public open space and nature from our further discussions. In addition, we exclude deliberate fire becasue it has a relatively low correlation with crime rate (approximatedly 0.13), the rate which is not significant enough as a rule of thumb.
 
 Therefore, we would only focus on the following variables in the following analysis.
@@ -355,29 +354,17 @@ Again crime rate and incapacity benefit rate have a moderate positive relationsh
 
 
 ###Unemployment Rate
+
 Unemployment rate here refers to percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people so presumably the percentage can be used to estimate unemployment rate. 
+
 A study found significantly positive effects of unemployment on property crime rates using US state data (Raphael and Winter‐Ebmer, 2001). Although we do not have crime rate data of different types of crimes (i.e. property crime), we expect the relation of crime rate in general and unemployment rate to be positively correlated.
->>>>>>> e7bc4b8e6c59f486b07b426bd4ba7595a7259d73
 
-"Incapacity Benefit or Severe Disablement Allowance claimant rate. 
-Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
-Source: IB/SDA from DWP, Population from GLA projections."
-###basic data selecting
 ```{r}
-<<<<<<< HEAD
-#read all the names of columns
-crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
-crime_health[,3:18] <- sapply(crime_health[,3:18], as.numeric)
-crime_health <- mutate(crime_health, `Childhood Obesity 2009-2013`=(`Childhood Obesity 2009`+`Childhood Obesity 2010`+`Childhood Obesity 2011`+`Childhood Obesity 2012`+`Childhood Obesity 2013`)/5)
-crime_health <- mutate(crime_health, `Incapacity Benefit rate - 2009-2013`=(`Incapacity Benefit rate - 2009`+`Incapacity Benefit rate - 2010`+`Incapacity Benefit rate - 2011`+`Incapacity Benefit rate - 2012`+`Incapacity Benefit rate - 2013`)/5)
-crime_health <- mutate(crime_health, `Crime rate - 2009-2013`=(`Crime rate - 2009`+`Crime rate - 2010`+`Crime rate - 2011`+`Crime rate - 2012`+`Crime rate - 2013`)/5)
-
-crime_health1 <- select(crime_health, -(`Childhood Obesity 2009`:`Crime rate - 2013`))
-=======
 cor_plot("unemployment_rate")
 ```
-<<<<<<< HEAD
+
 We also expect areas with considerately dense population (i.e. inner London) may potentially have more crimes even if the general employment rate are similar to suburban areas. If we split boroughs into inner and outer London, we can see employment and crime rate show only weak correlations of around 0.2 for innter London but stronger correlations (0.58-0.62) for outer London boroughs. 
+
 ```{r}
 # split borough into inner and outer
 desig <- read.csv("./Official_data/borough_desig.csv")
@@ -396,68 +383,35 @@ ggplot(outer_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
 
 mean_desig <- crime_ward_2013_desig%>% group_by(Designation)  %>% dplyr::summarise(avg_crime=mean(crime_rate))
 mean_desig
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 ```
-=======
+
 Our scatter plot shows moderate positive correlation between the two variables, which confirmed our hypothesis. The wards with higher unemployment rates are likely to have higher crime rates. 
 
 ###Education (GCSE Score and Unauthorised Pupil Absence)
+
 GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. Unauthorised Absence is absence without permission from a teacher or other authorised representative of the school. Wards with higher GCSE scores and lower unauthorised pupil absence suggect higher education well-being. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
->>>>>>> e7bc4b8e6c59f486b07b426bd4ba7595a7259d73
 
 ###Correlation Analysis
+
 ```{r}
-<<<<<<< HEAD
-names(crime_health1)
-crime_health2 <- crime_health1[, c(6,3,4,5)]
-cor(crime_health2)
-=======
 # correlation between GCSE & unauthorised pupil absence
 cor(crime_ward_2013$GCSE_point, crime_ward_2013$unauthorised_absence)
 ```
+
 The research of Lochner and Moretti (2004) shows that schooling significantly reduces criminal activity. We expect to see a negative relationship between GCSE score and crime rate but a positive relationship between unauthorised pupil absence. 
+
 ```{r}
 # plot education varialbes
 cor_plot("GCSE_point")
 cor_plot("unauthorised_absence")
 ```
+
 As we can see from the scatters, the relationships are consistant from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
 
 ### Dependent children
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
-
-```
-###Plots
-```{r}
-ggplot(crime_health2, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-ggplot(crime_health2, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-ggplot(crime_health2, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-
-ggplot(crime_health2, aes(x=cut(`Life Expectancy 2009-13`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-ggplot(crime_health2, aes(x=cut(`Childhood Obesity 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-ggplot(crime_health2, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-
-```
-  
-  
-  
-  
-  
-
-  
-
-<<<<<<< HEAD
-##Linear regression
-=======
-
-
-
-
-
-
-
 
 ##Correlation Matrix
+
 Finally, we study the correlation between any two variables by construsting a correlation matrix. Before we get into , we notice that some of our independent variables are highly correlated, suggesting multicollinearity exists which can impact the model fits. 
 
 ```{r}
@@ -466,12 +420,8 @@ kable(cor_mat_df)
 
 ```
 
-
-
-
 	
 ## Linear regression
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 
 ##Conclusion and analysis
 
