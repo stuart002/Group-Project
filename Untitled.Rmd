@@ -193,44 +193,44 @@ crime_by_year <- crime_borough[, c(4, 25:29)]
 # changes the names of the coloumns
 colnames(crime_by_year) <- c("Borough", "Crime_Rate_2009", "Crime_Rate_2010", "Crime_Rate_2011","Crime_Rate_2012","Crime_Rate_2013")
 
-# plot the crime rate of 2009 for each borough
-ggplot(crime_by_year, aes(Borough, Crime_Rate_2009)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text = element_text(angle = 45, hjust = 1)) +
-  ylim(0, 150)
-
-# plot the crime rate of 2010 for each borough
-ggplot(crime_by_year, aes(Borough, Crime_Rate_2010)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text = element_text(angle = 45, hjust = 1)) +
-  ylim(0, 150)
-
-# plot the crime rate of 2011 for each borough
-ggplot(crime_by_year, aes(Borough, Crime_Rate_2011)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text = element_text(angle = 45, hjust = 1)) +
-  ylim(0, 150)
-
-# plot the crime rate of 2012 for each borough
-ggplot(crime_by_year, aes(Borough, Crime_Rate_2012)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text = element_text(angle = 45, hjust = 1)) +
-  ylim(0, 150)
-
-# plot the crime rate of 2013 for each borough
-ggplot(crime_by_year, aes(Borough, Crime_Rate_2013)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text = element_text(angle = 45, hjust = 1)) +
-  ylim(0, 150)
+# # plot the crime rate of 2009 for each borough
+# ggplot(crime_by_year, aes(Borough, Crime_Rate_2009)) +
+#   geom_bar(stat = "identity") +
+#   theme(axis.text = element_text(angle = 45, hjust = 1)) +
+#   ylim(0, 150)
+# 
+# # plot the crime rate of 2010 for each borough
+# ggplot(crime_by_year, aes(Borough, Crime_Rate_2010)) +
+#   geom_bar(stat = "identity") +
+#   theme(axis.text = element_text(angle = 45, hjust = 1)) +
+#   ylim(0, 150)
+# 
+# # plot the crime rate of 2011 for each borough
+# ggplot(crime_by_year, aes(Borough, Crime_Rate_2011)) +
+#   geom_bar(stat = "identity") +
+#   theme(axis.text = element_text(angle = 45, hjust = 1)) +
+#   ylim(0, 150)
+# 
+# # plot the crime rate of 2012 for each borough
+# ggplot(crime_by_year, aes(Borough, Crime_Rate_2012)) +
+#   geom_bar(stat = "identity") +
+#   theme(axis.text = element_text(angle = 45, hjust = 1)) +
+#   ylim(0, 150)
+# 
+# # plot the crime rate of 2013 for each borough
+# ggplot(crime_by_year, aes(Borough, Crime_Rate_2013)) +
+#   geom_bar(stat = "identity") +
+#   theme(axis.text = element_text(angle = 45, hjust = 1)) +
+#   ylim(0, 150)
 
 #Average crime over the 5 years, per borough
 average <- crime_by_year %>% mutate(average = (Crime_Rate_2009 + Crime_Rate_2010 + Crime_Rate_2011 + Crime_Rate_2012 + Crime_Rate_2013)/ 5)
 
 
-ggplot(average, aes(Borough, average)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text = element_text(angle = 45, hjust = 1)) +
-  ylim(0, 150)
+# ggplot(average, aes(Borough, average)) +
+#   geom_bar(stat = "identity") +
+#   theme(axis.text = element_text(angle = 45, hjust = 1)) +
+#   ylim(0, 150)
 
 ggplot(average, aes(Borough, average)) +
   geom_point() +
