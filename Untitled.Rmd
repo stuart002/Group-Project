@@ -363,7 +363,9 @@ As we can see from the scatters, the relationships are consistant from our expec
 
 ### Dependent children
 
-Dependent childing shows the percentage of children living in out-of-work benefit claimant households. A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
+Dependent childing shows the percentage of children living in out-of-work benefit claimant households. 
+
+A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
 ```{r}
 # plot children varialbes
 cor_plot("dependent_children")
