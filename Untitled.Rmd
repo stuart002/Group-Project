@@ -30,8 +30,6 @@ crime_borough[,5:ncol(crime_borough)] <- sapply(crime_borough[,5:ncol(crime_boro
 # data by ward
 crime_ward <- crime[2:626,]
 crime_ward[,5:ncol(crime_ward)] <- sapply(crime_ward[,5:ncol(crime_ward)],as.numeric)
-summary(crime_ward[,29])
-
 
 ```
 
@@ -71,10 +69,13 @@ Environment | Access to public    | Measure of proportion of area that is greens
 Happiness   | Subjective well-    | Composite Score of Happiness, Life Satisfaction,
 -           | being avg score     | Worthwhileness and Anxiety
 
+## Hypothesis
+In this report, we will attempt to model crime rates in London wards on factors that signify overall well-being within the ward. Our hypothesis is that crime is dependent on demographic factors and well-being.
+
 
 ## Strength and limitations
 
-Some text needs to be added here
+Crime, in general, is very hard to measure and as in various big cities around the world, measuring crime in London is no easy task. Police statistics is usually the only measure to local crime. However, police crime figures are not always accurate as they tend to understate recorded crime statistics. Accordingly, crime statistics needs to be investigated with caution; sometimes data from hospitals intakes or victim surveys infer very different theories. 
 
 ## Overview analysis
 ### Crime by borough
@@ -163,17 +164,26 @@ ggplot(data = london_boroughs_f, # the input data
         axis.ticks = element_blank()) # remove axis ticks
 ```
 
+### Crime by ward
+
+An aspect of note regarding crime rates across wards, is that the majority of wards in London have a crime rate smaller than the mean. This aspect is illustrated on the histogram below, where, compared to the normal distribution, the crime rate data from 2013 is skewed towards the left. This will have furthur implications on possible regressions, to be examined furthur. 
+ 
+
+```{r, echo = FALSE}
+ 
+ggplot(crime_ward, aes(x = `Crime rate - 2013`)) + 
+  geom_histogram(aes(y = ..density..), binwidth = 7,
+  colour="black", fill="white") +
+  geom_density() +
+  geom_vline(aes(xintercept=mean(`Crime rate - 2013`)), 
+      color="red", linetype="dashed", size=0.5) +
+    stat_function(fun = dnorm, args = list(mean = 
+      mean(crime_ward$`Crime rate - 2013`), 
+      sd = sd(crime_ward$`Crime rate - 2013`)))
+```
+
+
 ### Crime historically
-
-###AMR###
-
-###TEXT: added some intro text. Check with Maria if it is needed for report###
-Crime, in general, is very hard to measure and as in various big cities around the world, measuring crime in London is no easy task. Police statistics is usually the only measure to local crime. However, police crime figures are not always accurate as they tend to understate recorded crime statistics. Accordingly, crime statistics needs to be investigated with caution; sometimes data from hospitals intakes or victim surveys infer very different theories. Geographically, London is divided into 32 boroughs and each borough consists of multiple wards. During our analysis, we will look at crimes rates across the 32 boroughs along 5 years; from 2009 till 2013.
-
-Analyzing crime data across London benefit both the governmental organizations and the individuals. For example, organizations can use the data to implement better services and check for core reasons why crime in one area is higher than the other, while, individuals can utilize this data to make calculated decisions on where to buy or rent a house in London. 
-
-Our dataset measures the well-being scores across all London's wards. In our analysis, we will look at how different factors affect crime rates in different areas, such as how do unemployment rate affect crime rates or how GSCE test score relate to the crime rates. We will investigate the relationship between crime and different factors using linear regression tests and other statistical tests such as hypothesis test.
-###TEXT###
 
 ```{r}
 
@@ -442,14 +452,14 @@ kable(cor_mat_df)
 ## Linear regression
 In this section, we will attempt to model crime rates on a series of independent variables relating to well-being in London. As previously discussed, measures of greenspace, subjective well-being and deliberate fires rates will be neglected in this model due to low levels of significant correlation. Variables capturing levels of incapacity benefits and of children in out-of-work households will also be excluded due to high levels of correlation with the other remaining independent variables. 
 
-The model created uses OLS or ordinary least squares to form a linear regression that minimizes the sum of the squared difference between the estimated and original values of the dependent variable.  As previously mentioned, the distribution of the crime rate in 2013 across wards was negatively skewed. Because OLS assumes a normal distribution of the dependent variable, it will be transformed logarithmically and a value of one will be added to improve the distribution and ___ .
+The model created uses OLS or ordinary least squares to form a linear regression that minimizes the sum of the squared difference between the estimated and original values of the dependent variable.  As previously mentioned, the distribution of the crime rate in 2013 across wards was negatively skewed. Because OLS assumes a normal distribution of the dependent variable, it will be transformed logarithmically to improve its distribution.
 
 ```{r}
 # first and second regression
-log_lin_full <- lm(log(crime_rate + 1) ~ life_expectancy + childhood_obesity + 
+log_lin_full <- lm(log(crime_rate) ~ life_expectancy + childhood_obesity + 
                      unemployment_rate + GCSE_point + unauthorised_absence + 
                      public_transport, data = crime_ward_2013)
-log_lin1 <- lm(log(crime_rate + 1) ~ life_expectancy + unemployment_rate + 
+log_lin1 <- lm(log(crime_rate) ~ life_expectancy + unemployment_rate + 
                  unauthorised_absence + public_transport , data = crime_ward_2013)
 # comparison
 stargazer(list(log_lin_full, log_lin1), type = 'text', digits = 2)
