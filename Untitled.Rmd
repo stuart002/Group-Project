@@ -356,11 +356,11 @@ cor_plot("unauthorised_absence")
 ```
 As we can see from the scatters, the relationships are consistant from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
 
+
 ### Dependent children
-
-Dependent childing shows the percentage of children living in out-of-work benefit claimant households. 
-
-A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
+Dependent children are the percentage of children living in out-of-work benefit claimant households, which represents the number of children dependent on a parent or guardian who is claiming one or a combination of out-of-work benefits. In general, people may believe that dependent children are associated with the crime rate. According to correlation statistics and graph below, there is a moderate positive correlation (0.4654) indicates that boroughs with higher dependent children percentage tend to have a higher crime rate.
+ 
+From the table x above, the p-value of correlation test between the dependent children and the crime rate is much less than 5% significance level. So we are confident to reject the null hypothesis, which states that there is a linear relationship between these two variables. we can then conclude that dependent children is positively correlated with crime rate. The borough area that have more dependent children are likely to have a higher crime rate. In the following analysis, we will come back to analyse our discover by rigorous regression analysis.
 ```{r}
 # plot children varialbes
 cor_plot("dependent_children")
