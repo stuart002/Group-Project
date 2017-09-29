@@ -417,13 +417,12 @@ In this section, we will attempt to model crime rates on a series of independent
 The model created uses OLS or ordinary least squares to form a linear regression that minimizes the sum of the squared difference between the estimated and original values of the dependent variable.  As previously mentioned, the distribution of the crime rate in 2013 across wards was negatively skewed. Because OLS assumes a normal distribution of the dependent variable, it will be transformed logarithmically and a value of one will be added to improve the distribution and ___ .
 
 ```{r}
-# Creating a crime-ward dataframe with only 2013 values
-crime_ward_13 <- crime_ward[,c(3, 9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64)]
-names(crime_ward_13) <- c('ward', 'life_exp', 'incap', 'child_ob', 'unemp', 'crime', 'fires', 'gcse', 'absence', 'out_of_work', 'public_trans', 'greenspace', 'well_being')
-
 # first and second regression
-log_lin_full <- lm(log(crime + 1) ~ life_exp + child_ob + unemp + gcse + absence + public_trans, data = crime_ward_13)
-log_lin1 <- lm(log(crime + 1) ~ unemp + life_exp + absence + public_trans, data = crime_ward_13)
+log_lin_full <- lm(log(crime_rate + 1) ~ life_expectancy + childhood_obesity + 
+                     unemployment_rate + GCSE_point + unauthorised_absence + 
+                     public_transport, data = crime_ward_2013)
+log_lin1 <- lm(log(crime_rate + 1) ~ life_expectancy + unemployment_rate + 
+                 unauthorised_absence + public_transport , data = crime_ward_2013)
 # comparison
 stargazer(list(log_lin_full, log_lin1), type = 'text', digits = 2)
 ```
