@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 .Rproj.user
+=======
+.Rproj.user/*
+>>>>>>> 1cb7b3330c9ee3820c29c8196b3f47bed4d50efc
 .Rhistory
 .RData
 .Ruserdata
