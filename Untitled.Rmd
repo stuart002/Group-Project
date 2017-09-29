@@ -366,10 +366,10 @@ cor_plot("unauthorised_absence")
 As we can see from the scatters, the relationships are consistant from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
 
 ### Dependent children
+Dependent children are the percentage of children living in out-of-work benefit claimant households, which represents the number of children dependent on a parent or guardian who is claiming one or a combination of out-of-work benefits. In general, people may believe that dependent children are associated with the crime rate. According to correlation statistics and graph below, there is a moderate positive correlation (0.4654) indicates that boroughs with higher dependent children percentage tend to have a higher crime rate.
 
-Dependent childing shows the percentage of children living in out-of-work benefit claimant households. 
+From the table x above, the p-value of correlation test between the dependent children and the crime rate is much less than 5% significance level. So we are confident to reject the null hypothesis, which states that there is a linear relationship between these two variables. we can then conclude that dependent children is positively correlated with crime rate. The borough area that have more dependent children are likely to have a higher crime rate. In the following analysis, we will come back to analyse our discover by rigorous regression analysis.
 
-A moderate positive correlation indicates that boroughs with higher dependent children percentage tends to have higher crime rate.
 ```{r}
 # plot children varialbes
 cor_plot("dependent_children")
@@ -396,7 +396,10 @@ It is clearly seen from the graph x that there is almost no correlation between 
 ```{r}
 cor_plot("public_transport")
 ```
-In terms of public transport accessibility. There exists a clear moderate positive relationship with an increasing trend. for example, the correlation figure was 0.3784 in 2009, gradually increased to 0.4585 in 2012. Overall, the correlation figure remains around 0.42. The higher public transport accessibility people have, the crime rate tends to be higher. 
+Public transport accessibility scores measure the accessibility of a point to the public transport network. From terrorist attack records, it is observed that many crime events happened in the public transport accessibility area. Because it is extremely difficult to control many citizens flow in such areas; in particular, subway and train stations. Therefore, it is commonly believed that public transport accessibility area is highly associated with the crime rate. From the correlation statistics and graph below, there is a moderate positive correlation (0.4421), means that boroughs with better public accessibility are likely to have a higher crime rate.
+
+According to the above table x, the correlation test statistics between the public transport accessibility and the crime rate is significant with P-value being much less than the significance level. So we can reject the null hypothesis, indicates that there is a linear relationship between these two variables. We can conclude that public transport accessibility is positively correlated with the crime rate.  In the following analysis, we will come back to analyse our discover by rigorous regression analysis.
+
 
 
 
