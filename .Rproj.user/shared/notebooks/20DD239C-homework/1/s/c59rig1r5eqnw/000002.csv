@@ -1,6 +1,0 @@
-"0","library(car)"
-"0","st <- States"
-"0","# This is for convenience and transforms the rownames into an additional column"
-"0","st[, ""States""] <- rownames(st)"
-"0","# You can access the description of the dataset with the following:"
-"0","# ?States"
