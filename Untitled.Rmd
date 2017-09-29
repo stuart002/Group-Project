@@ -412,9 +412,41 @@ kable(cor_mat_df)
 
 	
 ## Linear regression
+In this section, we will attempt to model crime rates on a series of independent variables relating to well-being in London. As previously discussed, measures of greenspace, subjective well-being and deliberate fires rates will be neglected in this model due to low levels of significant correlation. Variables capturing levels of incapacity benefits and of children in out-of-work households will also be excluded due to high levels of correlation with the other remaining independent variables. 
+
+The model created uses OLS or ordinary least squares to form a linear regression that minimizes the sum of the squared difference between the estimated and original values of the dependent variable.  As previously mentioned, the distribution of the crime rate in 2013 across wards was negatively skewed. Because OLS assumes a normal distribution of the dependent variable, it will be transformed logarithmically and a value of one will be added to improve the distribution and ___ .
+
+```{r}
+# Creating a crime-ward dataframe with only 2013 values
+crime_ward_13 <- crime_ward[,c(3, 9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59, 64)]
+names(crime_ward_13) <- c('ward', 'life_exp', 'incap', 'child_ob', 'unemp', 'crime', 'fires', 'gcse', 'absence', 'out_of_work', 'public_trans', 'greenspace', 'well_being')
+
+# first and second regression
+log_lin_full <- lm(log(crime + 1) ~ life_exp + child_ob + unemp + gcse + absence + public_trans, data = crime_ward_13)
+log_lin1 <- lm(log(crime + 1) ~ unemp + life_exp + absence + public_trans, data = crime_ward_13)
+# comparison
+stargazer(list(log_lin_full, log_lin1), type = 'text', digits = 2)
+```
+
+The first six-variable regression revealed a non-significant causal relationship between crime rate and the prevalence of childhood obesity, as well as, average GCSE scores. These will therefore be excluded from the final regression. The second regression models crime rate on a collection of 4 continuous variables: average life-expectancy, unemployment rate, unauthorized absence in school and accessibility to public transport. These four variables are all individually significant at the 95% confidence interval. The overall model has an adjusted R-squared of 37%. Albeit moderate, this measure of the degree to which the chosen variables are able to explain the variance in the crime rate is significant at the 95% interval. Hence, we are unable to reject the null that crime rate can be explained by a series of well-being indicators.
+
+
 
 ## Conclusion and analysis
 
+[TEXT]
+
+The model shows a negative relationship between crime rate and life expectancy, suggesting that a healthier ward encourages less crime. ___
+
+Secondly the relationship between crime rates and unemployment rate is positive, meaning that a more unemployed population is more likely to commit crime, possibly attributed to increased anti-social behavior or need of alternative income. ___
+
+The variable capturing the level of unauthorized absence in schools, as expected has a positive relationship with crime. This could be as a result of ___
+
+Public transport seems to have a positive relationship with crime. This seems contradictory as the well-being report assumes that access to public transport improves overall well-being of the ward. It may, however, be the case, that increased public transport increases human traffic and so the likelihood of crime increases. ____
+
+These variables only tell part of the story.
+
+[TEXT]
 
 #Bibliography
 Raphael, S. and Winter‐Ebmer, R. (2001). Identifying the Effect of Unemployment on Crime. The Journal of Law and Economics, 44(1), pp.259-283.
