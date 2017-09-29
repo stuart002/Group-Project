@@ -17,6 +17,10 @@ library(rgdal)
 library(plyr)
 library(rgeos)
 library(stargazer)
+library(SPARQL)
+library(RColorBrewer)
+library(corrplot)
+
 
 ```
 
@@ -442,6 +446,9 @@ Finally, we study the correlation between any two variables by construsting a co
 ```{r}
 cor_mat_df<-round(cor(select(crime_ward_2013, -Ward, -Borough, -home_access, -`well-being`, -deliberate_fires)),4)
 kable(cor_mat_df)
+col1 <- colorRampPalette(brewer.pal(9,"BrBG"))
+corrplot(cor_mat_df,method = "square", order = "FPC", tl.col = "black", tl.cex = 0.75,, sig.level = 0.05, insig = "pch", pch.cex = 1, col = col1(100))
+
 
 ```
 
