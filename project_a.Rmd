@@ -172,7 +172,6 @@ ggplot(data = london_boroughs_f, # the input data
 
 #Correlations
 ```{r}
-<<<<<<< HEAD
 #the following codes can produce long table and plots with correlations on them
 # correlation part not finished
 var_list = c("childhood_obesity","incapacity_benefit","unemployment_rate","crime_rate","deliberate_fires","GCSE_point","unauthorised_absence","dependent_children","public_transport","home_access")
@@ -199,7 +198,6 @@ for (item in var_list) {
   }
 }
 
-=======
 
 # selects relevant data from the whole dataset. Borough and crime rate on each of the 5 years.
 crime_by_year <- crime_borough[, c(4, 25:29)]
@@ -278,8 +276,8 @@ variable_name<-c("life_expectancy","childhood_obesity","incapacity_benefit","une
 for (i in seq(from = 9, to = 64, by= 5 )){
   if (i != 29){
   cor_test <- cor.test(crime_ward[[i]],crime_ward[[29]])
-  cor_test_pvalue <-c(cor_test_pvalue,(cor_test$p.value))
-  cor_test_cor <- c(cor_test_cor, (cor_test$estimate[[1]]))
+  cor_test_pvalue <-c(cor_test_pvalue,round((cor_test$p.value),4))
+  cor_test_cor <- c(cor_test_cor, (round(cor_test$estimate[[1]],4)))
   }
 }
 
@@ -295,7 +293,9 @@ We would like to examine whether the correlation between crime rate and one of t
 
 The significance level refers to a certain degree of risk of concluding that a diffrence exists while in fact there is no diffrence. We belive a significance level of 0.05 is fair enough for this report. Therefore, if the p-value of a correlation test is less than or equal to α, we would conclude that the correlation is statistically significant and would be further discussed.
 
+We then remove subjective well-being score and the proportion of accessing to public open space and nature from our further discussions. In addition, we exclude deliberate fire becasue it has a relatively low correlation with crime rate (approximatedly 0.13), the rate which is not significant enough as a rule of thumb.
 
+Therefore, we would only focus on the following variables in the following analysis.
 
 ```{r}
 # crime_ward_2013
@@ -312,83 +312,59 @@ cor_plot <- function(col_name) {
 }
 # example: cor_plot("unemployment_rate")
 ```
-## Correlations between crime rate and 3 health-related indexes
-### Description
-These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
+
 ### Life Expectancy
+
 According to the data description provided by London datastore, rolling 5-year combined life expectancies instead of simple one-year life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year.
-A study in 2015 reviewed that biological aging processes may be impacted by socioeconomic milieu, meaning that those who living in noisy area with high crime may have shorter cellular aging estimated by leukocyte telomere length (Park et al., 2015). Therefore, it is reasonable to estimate that a negative correlation between crime rate and life expectancy.
+
+A study in 2015 reviewed that biological aging processes may be impacted by socioeconomic milieu, meaning that those who living in noisy area with high crime may have shorter cellular aging estimated by leukocyte telomere length (Park et al., 2015). Therefore, it is reasonable to estimate that a negative correlation between crime rate and life expectancy in 2013.
 
 
 ```{r}
 cor_plot("life_expectancy")
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 ```
 
+From the above scatter point graph, moderate negative relationship between crime rate and life expectancy can be found, with Pearson r -0.3631. Also, a significant portion of points are far from the smooth line indicates only a moderate linear relationship between the variables.
 
-<<<<<<< HEAD
-##Correlations between crime rate and 3 health-related indexes
-###Description
-These three health-realated indexes including rolling 5-year combined life expectancies, prevalence of obsity by area of child residence, and incapcaity benefit or servere disablement allowance claimant rate.
-=======
-An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
-Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation before actually conducting the analysis.
+### Childhood Obesity
+
+Children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. The Childhood Obesity rate are combined by the latest three years of National Child Measurement Programme (NCMP) data. This means, the data we use is the average of data in 2011, 2012, and 2013. 
+
+An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 acdemic studies, half of which were conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
+
+Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation.
 
 ```{r}
 cor_plot("childhood_obesity")
 ```
 
+Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a moderate positive relationship, with r of 0.3757.
 
-
-
-
-
-
-Similar to the correlation between crime rate and life expectancy, crime rate and childhood obesity share a weak-to-moderate positive relationship, with Pearson r's range from 0.372 to 0.389.
-The analysis results confirm our expectation based on the study conducted by An et al. (2017).
-It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
+The analysis results confirm our expectation based on the study conducted by An et al. (2017). It is noticebaly that expect for in year 2013, wards that have extremely high childhood obesity score tend to have lower crime rate, the phenomenon violate the moderate positive relationship between the two variables.
 
 ###Incapacity Benefit
-Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate.Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
+
+Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate. Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions and Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
+
 ```{r}
 cor_plot("incapacity_benefit")
 ```
-Again crime rate and incapacity benefit rate have a moderate positive relationship according to Pearson r's range from 0.3917 to 0.4752 in different years.
-Although the maximum incapacity benefit rate decreased continously from around 15% in 2009 to around 5% in 2013, wards with highest incapacity benefit rates have relatively low crime rates in all 5 years.  
-A number of wards have relatively high crime rates while having similar incapacity benefit rates as other wards. This may indicate that crime rate correlates to not only incapacity benefit but also other variables.
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 
-Rolling 5-year combined life expectancies are used for wards to reduce the efffects of the variability in number of deaths in each year. Index scores were reversed so higher life expectancy equals better well-being. 
-Source: ONS mortality data and GLA population projections, GLA Calculations.
+Again crime rate and incapacity benefit rate have a moderate positive relationship, with a r equals to 0.3917 in 2013. The moderate correlation may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. 
 
-<<<<<<< HEAD
-"Prevalence of obesity by area of child residence. The estimates use the latest three years of NCMP data combined eg '2013' covers 2010/11 to 2012/13. Children with a BMI greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. Earliest data available is 2008/09 to 2010/11, which has been used for 2009-2011.
-Source: National Obesity Observatory"					
-=======
+
 ###Unemployment Rate
+
 Unemployment rate here refers to percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people so presumably the percentage can be used to estimate unemployment rate. 
+
 A study found significantly positive effects of unemployment on property crime rates using US state data (Raphael and Winter‐Ebmer, 2001). Although we do not have crime rate data of different types of crimes (i.e. property crime), we expect the relation of crime rate in general and unemployment rate to be positively correlated.
->>>>>>> e7bc4b8e6c59f486b07b426bd4ba7595a7259d73
 
-"Incapacity Benefit or Severe Disablement Allowance claimant rate. 
-Incapacity Benefit (IB) is paid to people who are incapable of work and who meet certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability. SDA was removed for new claims in April 2001. Time period used is a snapshot of May from each year. Demominator is population aged 16-64. 
-Source: IB/SDA from DWP, Population from GLA projections."
-###basic data selecting
 ```{r}
-<<<<<<< HEAD
-#read all the names of columns
-crime_health <- select(crime_ward, Ward:`Incapacity Benefit rate - 2013`, -(`Life Expectancy 2005-2009`:`Life Expectancy 2008-12`),`Crime rate - 2009`:`Crime rate - 2013`)
-crime_health[,3:18] <- sapply(crime_health[,3:18], as.numeric)
-crime_health <- mutate(crime_health, `Childhood Obesity 2009-2013`=(`Childhood Obesity 2009`+`Childhood Obesity 2010`+`Childhood Obesity 2011`+`Childhood Obesity 2012`+`Childhood Obesity 2013`)/5)
-crime_health <- mutate(crime_health, `Incapacity Benefit rate - 2009-2013`=(`Incapacity Benefit rate - 2009`+`Incapacity Benefit rate - 2010`+`Incapacity Benefit rate - 2011`+`Incapacity Benefit rate - 2012`+`Incapacity Benefit rate - 2013`)/5)
-crime_health <- mutate(crime_health, `Crime rate - 2009-2013`=(`Crime rate - 2009`+`Crime rate - 2010`+`Crime rate - 2011`+`Crime rate - 2012`+`Crime rate - 2013`)/5)
-
-crime_health1 <- select(crime_health, -(`Childhood Obesity 2009`:`Crime rate - 2013`))
-=======
 cor_plot("unemployment_rate")
 ```
-<<<<<<< HEAD
+
 We also expect areas with considerately dense population (i.e. inner London) may potentially have more crimes even if the general employment rate are similar to suburban areas. If we split boroughs into inner and outer London, we can see employment and crime rate show only weak correlations of around 0.2 for innter London but stronger correlations (0.58-0.62) for outer London boroughs. 
+
 ```{r}
 # split borough into inner and outer
 desig <- read.csv("./Official_data/borough_desig.csv")
@@ -407,68 +383,35 @@ ggplot(outer_ward,aes(x=unemployment_rate,y=crime_rate))+geom_point(alpha=0.2)+
 
 mean_desig <- crime_ward_2013_desig%>% group_by(Designation)  %>% dplyr::summarise(avg_crime=mean(crime_rate))
 mean_desig
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 ```
-=======
+
 Our scatter plot shows moderate positive correlation between the two variables, which confirmed our hypothesis. The wards with higher unemployment rates are likely to have higher crime rates. 
 
 ###Education (GCSE Score and Unauthorised Pupil Absence)
+
 GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. Unauthorised Absence is absence without permission from a teacher or other authorised representative of the school. Wards with higher GCSE scores and lower unauthorised pupil absence suggect higher education well-being. Not surprisingly, these two variables have negatively relationship with a correlation of -0.5979. 
->>>>>>> e7bc4b8e6c59f486b07b426bd4ba7595a7259d73
 
 ###Correlation Analysis
+
 ```{r}
-<<<<<<< HEAD
-names(crime_health1)
-crime_health2 <- crime_health1[, c(6,3,4,5)]
-cor(crime_health2)
-=======
 # correlation between GCSE & unauthorised pupil absence
 cor(crime_ward_2013$GCSE_point, crime_ward_2013$unauthorised_absence)
 ```
+
 The research of Lochner and Moretti (2004) shows that schooling significantly reduces criminal activity. We expect to see a negative relationship between GCSE score and crime rate but a positive relationship between unauthorised pupil absence. 
+
 ```{r}
 # plot education varialbes
 cor_plot("GCSE_point")
 cor_plot("unauthorised_absence")
 ```
+
 As we can see from the scatters, the relationships are consistant from our expectation. However, correlations (-0.33 and 0.374) between education variables and crime rate are relatively weaker compared with unemployment. Both of the variables are all related to primary school education. If we can also combine data from secondary school or even university to create a complete picture of education, it may reveal a stronger relationship with crime rate. 
 
 ### Dependent children
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
-
-```
-###Plots
-```{r}
-ggplot(crime_health2, aes(x=`Life Expectancy 2009-13`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-ggplot(crime_health2, aes(x=`Childhood Obesity 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-ggplot(crime_health2, aes(x=`Incapacity Benefit rate - 2009-2013`, y=`Crime rate - 2009-2013`))+geom_point()+geom_smooth()
-
-ggplot(crime_health2, aes(x=cut(`Life Expectancy 2009-13`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-ggplot(crime_health2, aes(x=cut(`Childhood Obesity 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-ggplot(crime_health2, aes(x=cut(`Incapacity Benefit rate - 2009-2013`, breaks =5), y=`Crime rate - 2009-2013`))+geom_boxplot()
-
-```
-  
-  
-  
-  
-  
-
-  
-
-<<<<<<< HEAD
-##Linear regression
-=======
-
-
-
-
-
-
-
 
 ##Correlation Matrix
+
 Finally, we study the correlation between any two variables by construsting a correlation matrix. Before we get into , we notice that some of our independent variables are highly correlated, suggesting multicollinearity exists which can impact the model fits. 
 
 ```{r}
@@ -477,12 +420,8 @@ kable(cor_mat_df)
 
 ```
 
-
-
-
 	
 ## Linear regression
->>>>>>> 252852c94f5c36b32d05520868a9d73c414d2d82
 
 ##Conclusion and analysis
 
