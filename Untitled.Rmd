@@ -48,30 +48,11 @@ Information on the 12 key indicators of well-being are given for 625 wards in Lo
 
 ### Variables
 
-Category    | Variable            | 
------------ | ------------------  | -----------------------------------------------
-Health      | Life Expectancy     | Reversed index of life-expectancies for a     
--           | -                   | rolling 5-year period
--           | Childhood obesity   | Prevalence of obesity by area of child residence
--           | Incapacity benefits | Claimant rate of Incapacity Benefit or Severe
--           | claimant rate       | Disablement Allowance
-Economic    | Unemployment rate   | Percent of working-age population claiming 
-Security    | -                   | Jobseeker's Allowance (JSA) or National
--           | -                   | Insurance Credits
-Safety      | Crime rate          | Notifiable offences per 1,000 daytime pop.
--           | Deliverate fires    | Deliberate fires per 1000 population
-Education   | GCSE point scores   | Average GCSE point scores
-Children    | Unauthorised pupil  | Absence in all maintained schools without 
--           | absence             | permission from authorised representative of
--           | -                   | the school
-Families    | Children in out of  | % of children dependent on a parent of guardian 
--           | work households     | claiming out-of-work benefits
-Access      | Public transport    | Measure of the accessibility of a point to the 
--           | Accessibility Score | public transport network
-Environment | Access to public    | Measure of proportion of area that is greenspace
--           | open space          | and accessibility from homes
-Happiness   | Subjective well-    | Composite Score of Happiness, Life Satisfaction,
--           | being avg score     | Worthwhileness and Anxiety
+```{r, echo = FALSE}
+var_1 <- read_excel("Official_data/Variables.xlsx", na = "empty")
+var_2 <- var_1[, 1:3]
+kable(var_2, format = "html")
+```
 
 ## Hypothesis
 In this report, we will attempt to model crime rates in London wards on factors that signify overall well-being within the ward. Our hypothesis is that crime is dependent on demographic factors and well-being.
