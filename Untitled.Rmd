@@ -20,7 +20,7 @@ library(stargazer)
 library(SPARQL)
 library(RColorBrewer)
 library(corrplot)
-
+library(modelr)
 
 ```
 
@@ -453,7 +453,15 @@ log_lin1 <- lm(log(crime_rate) ~ life_expectancy + unemployment_rate +
 stargazer(list(log_lin_full, log_lin1), type = 'text', digits = 2)
 ```
 
-The first six-variable regression revealed a non-significant causal relationship between crime rate and the prevalence of childhood obesity, as well as, average GCSE scores. These will therefore be excluded from the final regression. The second regression models crime rate on a collection of 4 continuous variables: average life-expectancy, unemployment rate, unauthorized absence in school and accessibility to public transport. These four variables are all individually significant at the 95% confidence interval. The overall model has an adjusted R-squared of 37%. Albeit moderate, this measure of the degree to which the chosen variables are able to explain the variance in the crime rate is significant at the 95% interval. Hence, we are unable to reject the null that crime rate can be explained by a series of well-being indicators.
+The first six-variable regression revealed a non-significant causal relationship between crime rate and the prevalence of childhood obesity, as well as, average GCSE scores. These will therefore be excluded from the final regression. The second regression models crime rate on a collection of 4 continuous variables: average life-expectancy, unemployment rate, unauthorized absence in school and accessibility to public transport. These four variables are all individually significant at the 95% confidence interval. The overall model has an adjusted R-squared of 37%. Albeit moderate, this measure of the degree to which the chosen variables are able to explain the variance in the crime rate is significant at the 95% interval. 
+
+```{r, echo = FALSE}
+res_plot <- add_residuals(crime_ward_2013, log_lin1, "Residuals") 
+ggplot(res_plot, aes(crime_ward_2013$crime_rate, Residuals)) +geom_point()
+```
+
+
+Hence, we are unable to reject the null that crime rate can be explained by a series of well-being indicators.
 
 
 
