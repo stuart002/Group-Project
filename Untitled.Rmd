@@ -20,7 +20,7 @@ library(stargazer)
 library(SPARQL)
 library(RColorBrewer)
 library(corrplot)
-
+library(modelr)
 
 ```
 
@@ -48,30 +48,11 @@ Information on the 12 key indicators of well-being are given for 625 wards in Lo
 
 ### Variables
 
-Category    | Variable            | 
------------ | ------------------  | -----------------------------------------------
-Health      | Life Expectancy     | Reversed index of life-expectancies for a     
--           | -                   | rolling 5-year period
--           | Childhood obesity   | Prevalence of obesity by area of child residence
--           | Incapacity benefits | Claimant rate of Incapacity Benefit or Severe
--           | claimant rate       | Disablement Allowance
-Economic    | Unemployment rate   | Percent of working-age population claiming 
-Security    | -                   | Jobseeker's Allowance (JSA) or National
--           | -                   | Insurance Credits
-Safety      | Crime rate          | Notifiable offences per 1,000 daytime pop.
--           | Deliverate fires    | Deliberate fires per 1000 population
-Education   | GCSE point scores   | Average GCSE point scores
-Children    | Unauthorised pupil  | Absence in all maintained schools without 
--           | absence             | permission from authorised representative of
--           | -                   | the school
-Families    | Children in out of  | % of children dependent on a parent of guardian 
--           | work households     | claiming out-of-work benefits
-Access      | Public transport    | Measure of the accessibility of a point to the 
--           | Accessibility Score | public transport network
-Environment | Access to public    | Measure of proportion of area that is greenspace
--           | open space          | and accessibility from homes
-Happiness   | Subjective well-    | Composite Score of Happiness, Life Satisfaction,
--           | being avg score     | Worthwhileness and Anxiety
+```{r, echo = FALSE}
+var_1 <- read_excel("Official_data/Variables.xlsx", na = "empty")
+var_2 <- var_1[, 1:3]
+kable(var_2, format = "html")
+```
 
 ## Hypothesis
 In this report, we will attempt to model crime rates in London wards on factors that signify overall well-being within the ward. Our hypothesis is that crime is dependent on demographic factors and well-being.
@@ -473,7 +454,15 @@ log_lin1 <- lm(log(crime_rate) ~ life_expectancy + unemployment_rate +
 stargazer(list(log_lin_full, log_lin1), type = 'text', digits = 2)
 ```
 
-The first six-variable regression revealed a non-significant causal relationship between crime rate and the prevalence of childhood obesity, as well as, average GCSE scores. These will therefore be excluded from the final regression. The second regression models crime rate on a collection of 4 continuous variables: average life-expectancy, unemployment rate, unauthorized absence in school and accessibility to public transport. These four variables are all individually significant at the 95% confidence interval. The overall model has an adjusted R-squared of 37%. Albeit moderate, this measure of the degree to which the chosen variables are able to explain the variance in the crime rate is significant at the 95% interval. Hence, we are unable to reject the null that crime rate can be explained by a series of well-being indicators.
+The first six-variable regression revealed a non-significant causal relationship between crime rate and the prevalence of childhood obesity, as well as, average GCSE scores. These will therefore be excluded from the final regression. The second regression models crime rate on a collection of 4 continuous variables: average life-expectancy, unemployment rate, unauthorized absence in school and accessibility to public transport. These four variables are all individually significant at the 95% confidence interval. The overall model has an adjusted R-squared of 37%. Albeit moderate, this measure of the degree to which the chosen variables are able to explain the variance in the crime rate is significant at the 95% interval. 
+
+```{r, echo = FALSE}
+res_plot <- add_residuals(crime_ward_2013, log_lin1, "Residuals") 
+ggplot(res_plot, aes(crime_ward_2013$crime_rate, Residuals)) +geom_point()
+```
+
+
+Hence, we are unable to reject the null that crime rate can be explained by a series of well-being indicators.
 
 
 
