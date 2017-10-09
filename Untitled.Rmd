@@ -1,5 +1,5 @@
 title: "project_aa"
-author: "maria"
+author: "01221975, 01365564, 01381311, 01417146, 01419237, 01428264"
 date: "9/20/2017"
 output:
   html_document: default
@@ -450,6 +450,8 @@ log_lin_full <- lm(log(crime_rate) ~ life_expectancy + childhood_obesity +
                      public_transport, data = crime_ward_2013)
 log_lin1 <- lm(log(crime_rate) ~ life_expectancy + unemployment_rate + 
                  unauthorised_absence + public_transport , data = crime_ward_2013)
+
+plot(log_lin1)
 # comparison
 stargazer(list(log_lin_full, log_lin1), type = 'text', digits = 2)
 ```
