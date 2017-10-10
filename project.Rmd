@@ -25,6 +25,8 @@ library(SPARQL)
 library(RColorBrewer)
 library(corrplot)
 library(modelr)
+library(kableExtra)
+
 
 ```
 
@@ -47,16 +49,14 @@ Modern policy regarding crime rate has transitioned to a focus on preventative m
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
 ## Dataset description
-Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs and the City of London. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital.
-
-## Variables
-
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs and the City of London. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital (see Table 1).
 
 ```{r, echo = FALSE}
+
 var_1 <- read_excel("Official_data/Variables.xlsx", na = "empty")
 var_2 <- var_1[, 1:3]
-library(kableExtra)
-kable(var_2, format = "latex", options(knitr.kable.NA= '')) %>%
+
+kable(var_2, format = "latex", options(knitr.kable.NA= ''), caption = "Variables") %>%
   kable_styling(full_width = F) %>% column_spec(1, width = "15em") %>% column_spec(2, width = "15em") %>% column_spec(3, width = "15em")
 ```
 
