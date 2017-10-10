@@ -13,7 +13,6 @@ library(ggplot2)
 library(knitr)
 library(dplyr)
 library(rlang)
-library(dplyr)
 library(tidyr)
 library(rgdal)
 library(plyr)
@@ -52,7 +51,7 @@ Information on the 12 key indicators of well-being are given for 625 wards in Lo
 ```{r, echo = FALSE}
 var_1 <- read_excel("Official_data/Variables.xlsx", na = "empty")
 var_2 <- var_1[, 1:3]
-kable(var_2, format = "html")
+kable(var_2, format = "html", options(knitr.kable.NA= ''))
 ```
 
 ## Hypothesis
