@@ -3,11 +3,11 @@ title: "Examining the relationship between crime rates and well-being in London"
 author: "01221975, 01365564, 01381311, 01417146, 01419237, 01428264"
 date: "9/20/2017"
 output:
-  pdf_document:
-    latex_engine: xelatex
-    toc: yes
   html_document:
     fig_caption: yes
+    toc: yes
+  pdf_document:
+    latex_engine: xelatex
     toc: yes
 ---
 ```{r packages, echo = FALSE, message=FALSE, warning=FALSE,}
@@ -44,7 +44,7 @@ crime_ward[,5:ncol(crime_ward)] <- sapply(crime_ward[,5:ncol(crime_ward)],as.num
 
 
 ## Introduction
-Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. Mayor theoretical and empirical work in criminology suggests a relation between levels in crime and wellbeing (Kawachi, Kennedy and Wilkinson, 1999). A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
+Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. Major theoretical and empirical work in criminology suggests relations between levels of crime and wellbeing (Kawachi, Kennedy and Wilkinson, 1999). A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
@@ -65,7 +65,7 @@ As previously mentioned, this report will examine the relationship between crime
 
 ## Strength and limitations
 
-Crime, in general, is a complex concept  to measure. Police statistics are commonly used to analyse about local crime; however, several reasons may lead the given data to under-represent the prevalence of crime (Ross, 2014). Meeting certain targets can lead the police to understate the number of criminal offences. For instance, police records on crime in London have been under scrutiny by the UK Statistics Authority, as the police had been understating crime figures (Fogg, 2014). Moreover, numerous cases of crime are not reported to the police. Therefore, crime statistics need to be investigated with caution. For this report, the data on crime rates came from the UK Statistics Authority that looks into a range of survey and administrative data sources, providing comprehensive and robust evidence on crime rates for our analysis. 
+Crime, in general, is a complex concept  to measure. Police statistics are commonly used to analyse local crime; however, several reasons may lead the given data to under-represent the prevalence of crime (Ross, 2014). Meeting certain targets can lead the police to understate the number of criminal offences. For instance, police records on crime in London have been under scrutiny by the UK Statistics Authority, as the police had been understating crime figures (Fogg, 2014). Moreover, numerous cases of crime are not reported to the police. Therefore, crime statistics need to be investigated with caution. For this report, the data on crime rates came from the UK Statistics Authority that looks into a range of survey and administrative data sources, providing comprehensive and robust evidence on crime rates for our analysis. 
 
 ## Overview analysis
 ### Crime by borough over time
@@ -124,7 +124,7 @@ ggplot(data = london_boroughs_f_long, # the input data
 
 ```
 
-From 2009 to 2013, the crime rates of all districts in London have decreased. As seen in the maps of figure below, the districts in the outskirts of London seem to have a lower crime rates than the districts in the center of London with exception to the City of London. Moreover, from plot (Figure 1 and 2), we can see that the crime rate is decreasing from year to year, across all boroughs. 
+From 2009 to 2013, the crime rates of all districts in London have decreased. As seen in the maps of the figure below, the districts in the outskirts of London seem to have a lower crime rates than the districts in the center of London with exception to the City of London. Moreover, from plot (Figure 1 and 2), we can see that the crime rate is decreasing from year to year, across all boroughs. 
 
 ```{r, echo=FALSE, fig.cap="Crime rates by borough (2009-2013)"}
 
@@ -198,7 +198,7 @@ ggplot(crimerate, aes(Borough, Rate)) +
 
 ```
 
-City of London, remains with the lowest rate of crime across all districts with only 14 offences per 1,000 daytime inhabitants in 2013. In contrast, its neighbouring districts as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These districts are mainly located to the upper and lower side from the City of London (see Figure 3). 
+City of London has the lowest rate of crime across all districts with only 14 offences per 1,000 daytime inhabitants in 2013. In contrast, its neighbouring districts as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These districts are mainly located to the upper and lower side from the City of London (see Figure 3). 
 
 ```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate > 90 (2013)"}
 #plots the boroughs with highest crime rate of 100
@@ -250,7 +250,7 @@ ggplot(crime_ward, aes(x = `Crime rate - 2013`)) +
 ##Correlation Analysis
 The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other rates.The correlation coefficient ranges from −1 to +1, and a stronger relationship between two variables as a larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negative coefficient means two variables have opposite directions (Zhou et al., 2016).
 
-The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or vice versa. This analysis will not tell whether the relationships are causal.
+The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or vice versa. 
 
 
 ###Test of correlation 
@@ -351,7 +351,7 @@ A study found significantly positive effects of unemployment on property crime r
 cor_plot("unemployment_rate")
 ```
 
-Our scatter plot shows moderate positive correlation between the two variables, which confirms our thinking . The wards with higher unemployment rates are likely to have higher crime rates. 
+Our scatter plot shows moderate positive correlation between the two variables, which confirms our thinking. The wards with higher unemployment rates are likely to have higher crime rates. 
 
 ####GCSE Scores
 GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. A study (Petrocelli and Petrocelli, 2005) has found the academic achievement is inversely correlated with adult criminality. We therefore expect wards with higher GCSE scores to have higher education well-being and lower level of crime.  
@@ -432,6 +432,7 @@ However, by plotting the residuals of this model, it is clear that they covary w
 ## Conclusion and analysis
 
 Despite not being able to fully reject the null that crime rate cannot be entirely modelled on a series of well-being indicators, the model chosen does provide a compelling insight into possible reasons for varying crime rates across wards in London. The model shows a negative relationship between crime rate and life expectancy, suggesting that a healthier ward encourages less crime. Secondly the relationship between crime rates and unemployment rate is positive, meaning that a more unemployed population is more likely to commit crime, possibly attributed to increased antisocial behavior or need of alternative income. The variable capturing the level of unauthorized absence in schools, as expected has a positive relationship with crime. Public transport seems to have a positive relationship with crime. This seems contradictory as the well-being report assumes that access to public transport improves overall well-being of the ward. It may, however, be the case, that increased public transport increases human traffic and so the likelihood of crime increases. 
+
 However, as the residuals plot suggests, these variables, only tell part of the story. We suggest further analysis of crime rates that includes other variables. For example, the strength of the police force in wards may have a significant effect on the level of crime. Similarly, a larger proportion of the population who are young could cause more crime (Han, 2009). This research may prove more helpful in developing effective policies for reduction in crime rates. In order to compare fully the effect of preventative and punitive policies regarding the reduction of crime, it would be important to include analysis were levels of punishment vary. This type of analysis could help in explaining the ward-wide decrease in crime and ways that this could be promoted further.
 
 ##Bibliography
