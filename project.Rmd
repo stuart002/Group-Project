@@ -3,9 +3,10 @@ title: "Examining the relationship between crime rates and well-being in London"
 author: "01221975, 01365564, 01381311, 01417146, 01419237, 01428264"
 date: "9/20/2017"
 output:
+  pdf_document: 
+    latex_engine: xelatex
   html_document:
     toc: yes
-  pdf_document: default
 ---
 ```{r packages, echo = FALSE, message=FALSE, warning=FALSE,}
 library(readxl)
