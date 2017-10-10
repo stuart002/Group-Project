@@ -276,7 +276,7 @@ names(cor_test_df)[3]<-paste("P-Value")
 kable(cor_test_df)
 ```
 
-We will examine whether the correlation between crime rate and one of the other variables is significant by comparing the p-value to a certain significance level, denoted α. 
+We will examine whether the correlation between crime rate and one of the other variables is significant by comparing the p-value to a certain significance level, denoted as $\alpha$. 
 
 The significance level refers to a certain degree of risk of concluding that a difference exists while in fact there is no difference. We believe a significance level of 0.05 is adequate for this report. Therefore, if the p-value of a correlation test is less than or equal to 0.05, we would conclude that the correlation is statistically significant and would be further discussed.
 
