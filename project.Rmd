@@ -59,7 +59,6 @@ var_2 <- var_1[, 1:3]
 kable(var_2, format = "latex", options(knitr.kable.NA= ''), caption = "Variables") %>%
   kable_styling(full_width = F) %>% column_spec(1, width = "15em") %>% column_spec(2, width = "15em") %>% column_spec(3, width = "15em")
 ```
-
 ## Hypothesis
 As previously mentioned, this report will examine the relationship between crime rates in London and a collection of indicators of well-being. We expect some correlation between these factors, as well as, a form of causal relationship. The null hypothesis will therefore be that a selection of well-being factors is not able to explain crime-rate throughout wards in London. We will test this by forming a multivariate regression analysis where crime rate is the dependent variable and will be modelled on the demographic factors, treated as independent variables. If the causal relationship is not significant at the 95% confidence interval, the null hypothesis will be rejected.
 
@@ -73,7 +72,6 @@ Crime, in general, is a complex concept  to measure. Police statistics are commo
 
 In this section, we will provide an overview of how crime rates in London have changed over time by borough. For this, we looked into the numbers for all 32 boroughs in London. We also included City of London as it forms one of the 33 local authority districts of Greater London.
 
-From 2009 to 2013, the crime rates of all districts in London have decreased. As seen in the maps of figure below, the districts in the outskirts of London seem to have a lower crime rates than the districts in the center of London with exception to the City of London. Moreover, from plot (Figure 1), we can see that the crime rate is decreasing from year to year, across all boroughs. 
 
 ```{r crime_by_borough, message=FALSE, warning=FALSE, results='hide',echo=FALSE,fig.cap="Crime rate by borough from 2009 to 2013"}
 #selects relevant columns: borough (4) and all crime levels (25:29) and stores in crime_data_by_borough. Note boroughs are repeated because data is for wards
@@ -126,36 +124,7 @@ ggplot(data = london_boroughs_f_long, # the input data
 
 ```
 
-City of London, remains with the lowest rate of crime across all districts with only 14 offences per 1,000 daytime inhabitants in 2013. In contrast, its neighbouring districts as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These districts are mainly located to the upper and lower side from the City of London. 
-
-```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate > 90 (2013)"}
-#plots the boroughs with highest crime rate of 100
-ggplot(london_boroughs_f, aes(long, lat, group = group, fill=`2013`>90)) +
-  geom_polygon() + geom_path(colour="white", lwd=0.05) + coord_equal() +
-  labs(x = "lat", y = "lon",
-       fill = "Crime rate > 90") +
-  scale_fill_manual(values=c("#BDBDBD","#2196F3")) +
-  theme(axis.text = element_blank(), # change the theme options
-        axis.title = element_blank(), # remove axis titles
-        axis.ticks = element_blank()) # remove axis ticks
-```
-
-On average, boroughs have lowered their crime rates by 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rate are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
-
-```{r crime_rate_growth, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Decrease of crime rates by borough from 2009 to 2013"}
-ggplot(data = london_boroughs_f, # the input data
-       aes(x = long, y = lat, fill = growth, group = group)) + # define variables
-  geom_polygon() + # plot the boroughs
-  geom_path(colour="white", lwd=0.05) + # borough borders
-  coord_equal() + # fixed x and y scales
-  scale_fill_gradient2(low = "#66BB6A",high = "#4CAF50", # colors
-                        name = "Decrease (%)") + # legend options
-  theme(axis.text = element_blank(), # change the theme options
-        axis.title = element_blank(), # remove axis titles
-        axis.ticks = element_blank()) # remove axis ticks
-```
-
-On average, districts have lowered their crime rates by 19% from 2009 to 2013. The districts that seem to be showing the highest decrease in crime rate are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea. 
+From 2009 to 2013, the crime rates of all districts in London have decreased. As seen in the maps of figure below, the districts in the outskirts of London seem to have a lower crime rates than the districts in the center of London with exception to the City of London. Moreover, from plot (Figure 1 and 2), we can see that the crime rate is decreasing from year to year, across all boroughs. 
 
 ```{r, echo=FALSE, fig.cap="Crime rates by borough (2009-2013)"}
 
@@ -227,6 +196,35 @@ ggplot(crimerate, aes(Borough, Rate)) +
 
 #summary(crime_by_year)
 
+```
+
+City of London, remains with the lowest rate of crime across all districts with only 14 offences per 1,000 daytime inhabitants in 2013. In contrast, its neighbouring districts as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These districts are mainly located to the upper and lower side from the City of London (see Figure 3). 
+
+```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Crime rate > 90 (2013)"}
+#plots the boroughs with highest crime rate of 100
+ggplot(london_boroughs_f, aes(long, lat, group = group, fill=`2013`>90)) +
+  geom_polygon() + geom_path(colour="white", lwd=0.05) + coord_equal() +
+  labs(x = "lat", y = "lon",
+       fill = "Crime rate > 90") +
+  scale_fill_manual(values=c("#BDBDBD","#2196F3")) +
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
+```
+
+On average, boroughs have lowered their crime rates by 19% from 2009 to 2013. The boroughs that seem to be showing the highest decrease in crime rate are on the further southeast of London, as for instance in Greenwich, Barking and Dagenham and Lewisham. The boroughs with the least progress in decreasing crime are Tower Hamlets, Enfield and Kensington and Chelsea (see Figure 4). 
+
+```{r crime_rate_growth, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Decrease of crime rates by borough from 2009 to 2013"}
+ggplot(data = london_boroughs_f, # the input data
+       aes(x = long, y = lat, fill = growth, group = group)) + # define variables
+  geom_polygon() + # plot the boroughs
+  geom_path(colour="white", lwd=0.05) + # borough borders
+  coord_equal() + # fixed x and y scales
+  scale_fill_gradient2(low = "#66BB6A",high = "#4CAF50", # colors
+                        name = "Decrease (%)") + # legend options
+  theme(axis.text = element_blank(), # change the theme options
+        axis.title = element_blank(), # remove axis titles
+        axis.ticks = element_blank()) # remove axis ticks
 ```
 
 With this analysis we can notice that there’s been noticeable changes and differences in crime for every district over time. Later analysis in this report aims to explain those variations.
