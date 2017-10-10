@@ -422,7 +422,7 @@ The first six-variable regression revealed a non-significant causal relationship
 
 ```{r, echo = FALSE}
 res_plot <- add_residuals(crime_ward_2013, log_lin1, "Residuals") 
-ggplot(res_plot, aes(log(crime_ward_2013$crime_rate), Residuals)) +geom_point()
+ggplot(res_plot, aes(log(crime_ward_2013$crime_rate), Residuals)) +geom_point()+geom_hline(yintercept = 0, color = "red")
 ```
 
 However, by plotting the residuals of this model, it is clear that they covary with the dependent variable. This entails the prevalence of bias and means that there exists factors that are assumed to be part of the error term that are correlated with crime rates. To improve this model, we would have to include these variables in the regression. This explains the R-squared of 37% as there are other common factors that are dually-correlated with the dependent and independent variables. Therefore it is clear that further research needs to be undertaken as we are unable to fully reject the null hypothesis.
