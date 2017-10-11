@@ -26,8 +26,6 @@ library(RColorBrewer)
 library(corrplot)
 library(modelr)
 library(kableExtra)
-
-
 ```
 
 
@@ -44,33 +42,32 @@ crime_ward[,5:ncol(crime_ward)] <- sapply(crime_ward[,5:ncol(crime_ward)],as.num
 
 
 ## Introduction
-Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. Major theoretical and empirical work in criminology suggests relations between levels of crime and wellbeing (Kawachi, Kennedy and Wilkinson, 1999). A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
+Modern policy regarding crime rate has transitioned to a focus on preventative measures as opposed to consequential punishment. As outlined by Crawford and Evans (2017) these policies focus on early intervention and improving well-being to secure community safety. Major theoretical and empirical work in criminology suggests a strong relationship between levels of crime and wellbeing (Kawachi, Kennedy and Wilkinson, 1999). A comprehensive understanding of demographic variables that are highly correlated and plausibly causing crime rates is necessary for developing robust policies. Crime rate in London varies drastically by area. In 2013, crime rates ranged from 13.93 to 222.92, with a mean of 82.40 and a standard deviation of 30. With such drastically different levels of crime and significant outliers, there must be an underlying explanation.
 
 The dataset used in this report is from London datastore, an open data-sharing platform with statistics provided from the London mayoral office. The data is from 2013 and its original purpose was to assign a well-being score to different wards in London through measurements of 12 different indicators such as childhood obesity and deliberate fires. However, this report will focus on crime rates in London and explore the relationships between these rates and other demographic features of wards. It will attempt to model crime based on these additional indicators of well-being. Any significant results may prove to be insightful for policy makers considering local crime rates.
 
 ## Dataset Description
-Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs and the City of London. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the capital (see Table 1).
+Information on the 12 key indicators of well-being are given for 625 wards in London over a four-year time frame from 2009 to 2013. Additional borough-wide information is provided for the 32 London boroughs and the City of London. The variables are split into 8 different categories, detailed below, aiming to give a holistic view of the standard of well-being in the different areas of the British capital.
 
 ```{r, echo = FALSE}
 
 var_1 <- read_excel("Official_data/Variables.xlsx", na = "empty")
 var_2 <- var_1[, 1:3]
 
-kable(var_2, format = "html", options(knitr.kable.NA= ''), caption = "Variables") %>%
-  kable_styling(full_width = F) %>% column_spec(1, width = "15em") %>% column_spec(2, width = "15em") %>% column_spec(3, width = "15em")
+kable(var_2, format = "html", options(knitr.kable.NA= ''), caption = "Variables")
 ```
 ## Hypothesis
-As previously mentioned, this report will examine the relationship between crime rates in London and a collection of indicators of well-being. We expect some correlation between these factors, as well as, a form of causal relationship. The null hypothesis will therefore be that a selection of well-being factors is not able to explain crime-rate throughout wards in London. We will test this by forming a multivariate regression analysis where crime rate is the dependent variable and will be modelled on the demographic factors, treated as independent variables. If the causal relationship is not significant at the 95% confidence interval, the null hypothesis will be rejected.
+As previously mentioned, this report will examine the relationship between crime rates in London and a collection of indicators of well-being. We expect some correlation between these factors, as well as, a form of causal relationship. The null hypothesis will therefore be that a selection of well-being factors is not able to explain crime-rate throughout wards in London. We will test this by forming a multivariate regression analysis where crime rate is the dependent variable and will be modelled on the demographic factors, treated as independent variables. If the causal relationship is significant at the 95% confidence interval, the null hypothesis will be rejected.
 
 
 ## Strength and Limitations
 
-Crime, in general, is a complex concept  to measure. Police statistics are commonly used to analyse local crime; however, several reasons may lead the given data to under-represent the prevalence of crime (Ross, 2014). Meeting certain targets can lead the police to understate the number of criminal offences. For instance, police records on crime in London have been under scrutiny by the UK Statistics Authority, as the police had been understating crime figures (Fogg, 2014). Moreover, numerous cases of crime are not reported to the police. Therefore, crime statistics need to be investigated with caution. For this report, the data on crime rates came from the UK Statistics Authority that looks into a range of survey and administrative data sources, providing comprehensive and robust evidence on crime rates for our analysis. 
+Crime, in general, is a complex concept to measure. Police statistics are commonly used to analyse local crime; however, several reasons may lead the given data to under-represent the prevalence of crime (Ross, 2014). Meeting certain targets can lead the police to understate the number of criminal offences. For instance, police records on crime in London were under scrutiny by the UK Statistics Authority, as the police had been understating crime figures (Fogg, 2014). Moreover, numerous cases of crime are not reported to the police. Therefore, crime statistics need to be investigated with caution. For this report, the data on crime rates came from the UK Statistics Authority that looks into a range of survey and administrative data sources, providing comprehensive and robust evidence on crime rates for our analysis. 
 
 ## Overview Analysis
 ### Crime by Borough Over Time
 
-In this section, we will provide an overview of how crime rates in London have changed over time by borough. For this, we looked into the numbers for all 32 boroughs in London. We also included City of London as it forms one of the 33 local authority districts of Greater London.
+This section will provide an overview of how crime rates in London have changed over time by borough. Statistics for all 32 boroughs in London will be examined. The City of London will also be included as it forms one of the 33 local authority districts of Greater London.
 
 
 ```{r crime_by_borough, message=FALSE, warning=FALSE, results='hide',echo=FALSE,fig.cap="Figure 1. Crime rate by borough from 2009 to 2013"}
@@ -124,7 +121,7 @@ ggplot(data = london_boroughs_f_long, # the input data
 
 ```
 
-From 2009 to 2013, the crime rates of all districts in London have decreased. As seen in the maps of the figure below, the districts in the outskirts of London seem to have a lower crime rates than the districts in the center of London with exception to the City of London. Moreover, from plot (Figure 1 and 2), we can see that the crime rate is decreasing from year to year, across all boroughs. 
+From 2009 to 2013, the crime rates of all districts in London have decreased. As seen in the maps in the figure above, the districts in the outskirts of London seem to have a lower crime rates than the districts in the center of London with exception to the City of London. Moreover, the plots on Figure 1 and Figure 2 show crime rates across all boroughs consistently decreasing from year to year.
 
 ```{r, echo=FALSE, fig.cap="Figure 2. Crime rates by borough (2009-2013)", fig.width=9}
 
@@ -198,7 +195,7 @@ ggplot(crimerate, aes(Borough, Rate)) +
 
 ```
 
-City of London has the lowest rate of crime across all districts with only 14 offences per 1,000 daytime inhabitants in 2013. In contrast, its neighbouring districts as Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These districts are mainly located to the upper and lower side from the City of London (see Figure 3). 
+City of London has the lowest rate of crime across all districts with only 14 offences per 1,000 daytime inhabitants in 2013. In contrast, its neighbouring districts of Lambeth, Hackney, Southwark and Islington continue to present a crime rate of over 100. The map below shows the quartile with the highest number of crime rates in London (crime rate over 90). These districts are mainly located to the upper and lower side of the City of London (see Figure 3). 
 
 ```{r boroughs_with_high_crime_rate, message=FALSE, warning=FALSE, results='hide',echo=FALSE, fig.height = 4, fig.width = 5, fig.cap="Figure 3. Crime rate > 90 (2013)"}
 #plots the boroughs with highest crime rate of 100
@@ -227,7 +224,7 @@ ggplot(data = london_boroughs_f, # the input data
         axis.ticks = element_blank()) # remove axis ticks
 ```
 
-With this analysis we can notice that there’s been noticeable changes and differences in crime for every district over time. Later analysis in this report aims to explain those variations.
+This analysis provides evidence that there has been noticeable changes and differences in crime for every district over time. Later analysis in this report aims to explain these variations.
 
 ### Crime by Ward
 
@@ -247,13 +244,13 @@ ggplot(crime_ward, aes(x = `Crime rate - 2013`)) +
       sd = sd(crime_ward$`Crime rate - 2013`)))
 ```
 
-##Correlation Analysis
-The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other rates.The correlation coefficient ranges from −1 to +1, and a stronger relationship between two variables as a larger absolute value of the coefficient. Positive coefficient means both variables tend to increase or decrease together whereas negative coefficient means two variables have opposite directions (Zhou et al., 2016).
+## Correlation Analysis
+The correlation analysis in this report adopts the Pearson correlation coefficient, denoted r, with the aim to examine the strength and direction of the linear relationship between two continuous variables, i.e. crime rate and one of the other rates. The correlation coefficient ranges from $-1$ to $+1$, and has a larger absolute value when the relationship is stronger between the two variables. A positive coefficient means that both variables tend to increase or decrease together whereas a negative coefficient means that the two variables vary in opposite directions (Zhou et al., 2016).
 
 The following correlation analysis does not conclude that changes in one variable cause changes in crime rate or vice versa. 
 
 
-###Test of Correlation 
+### Test of Correlation 
 The following part will test the significance of the correlation between crime rates and other variables.
 
 ```{r, echo=FALSE}
@@ -278,9 +275,9 @@ kable(cor_test_df)
 
 We will examine whether the correlation between crime rate and one of the other variables is significant by comparing the p-value to a certain significance level, denoted as $\alpha$. 
 
-The significance level refers to a certain degree of risk of concluding that a difference exists while in fact there is no difference. We believe a significance level of 0.05 is adequate for this report. Therefore, if the p-value of a correlation test is less than or equal to 0.05, we would conclude that the correlation is statistically significant and would be further discussed.
+The significance level refers to a certain degree of risk of concluding that a difference exists while in fact there is no difference. We believe a significance level of 0.05 is adequate for this report. Therefore, if the p-value of a correlation test is less than or equal to 0.05, one could conclude that the correlation is statistically significant and the variable will be included in further discussion.
 
-As seen later in the report, we then remove the subjective well-being score and the proportion of accessing to public open space and nature from our correlation analysis and regression model because their p-values are over 0.8 for the former and over 0.7 for the latter; indicating there are not correlation between them and crime rates. In addition, we exclude deliberate fire because it has a relatively low correlation with crime rate (approximately 0.13), which is not significant enough as a rule of thumb.
+As a result, measures of subjective well-being and the proportion of access to public open space and nature will be excluded from our correlation analysis and regression model because their p-values are over 0.8 for the former and over 0.7 for the latter. These values indicate there is no significant correlation between them and crime rates. In addition, we exclude measures of the rate of deliberate fires because it has a relatively low correlation with crime rate (approximately 0.13), which is not significant enough as a rule of thumb.
 
 
 ```{r echo=FALSE}
@@ -299,11 +296,11 @@ cor_plot <- function(col_name) {
 # example: cor_plot("unemployment_rate")
 ```
 
-####Life Expectancy
+#### Life Expectancy
 
 In recent years, violence has been regarded as a public health issue, as areas with high crime rates tend to experience higher mortality rates from causes that exceed crime (Kawachi, Kennedy and Wilkinson, 1999). 
 
-A study in 2015 reviewed that biological aging processes may be impacted by socio-economic milieu, meaning that those who live in a noisy area with high crime rates may have shorter cellular aging estimated by leukocyte telomere length (Park et al., 2015). Therefore, it is reasonable to estimate that a negative correlation between crime rate and life expectancy.
+A study in 2015 reviewed that biological aging processes may be impacted by socio-economic milieu, meaning that those who live in a noisy area with high crime rates may have shorter cellular aging estimated by leukocyte telomere length (Park et al., 2015). Therefore, it is reasonable to estimate that a negative correlation persists between crime rate and life expectancy.
 
 The data set provides a 5-year rolling combined measure of life expectancy instead of a one-year measure, in order to reduce the effects of the variability in number of deaths in each year.
 
@@ -312,17 +309,17 @@ The data set provides a 5-year rolling combined measure of life expectancy inste
 cor_plot("life_expectancy")
 ```
 
-Using this data, we calculated the correlation between crime rate and life expectancy. Our calculation shows a moderate negative relationship between crime rate and life expectancy, with Pearson r -0.3631. The graph below shows negative relationship between both variables which supports our assumption. 
+Using this data, we calculated the correlation between crime rate and life expectancy. Our calculation shows a moderate negative relationship between crime rate and life expectancy, with Pearson r of -0.3631. The graph below shows negative relationship between both variables which supports our assumption. 
 
-####Childhood Obesity
+#### Childhood Obesity
 
-Children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. The Childhood Obesity rate are combined by the latest three years of National Child Measurement Programme (NCMP) data. This means, the data we use is the average of data in 2011, 2012, and 2013. 
+Children with a Body Mass Index (BMI) greater than or equal to the 95th centile of the British 1990 growth reference (UK90) BMI distribution have been classified as obese. The Childhood Obesity rate are combined by the latest three years of National Child Measurement Programme (NCMP) data. This means, the data provided is the average of data across 2011, 2012, and 2013. 
 
-An et al. (2017) revealed a  modest relationship between residential neighbourhood safety and weight-related behaviours/outcomes among children and adolescents through examing 22 studies, Half of which conducted in the USA, and one of which was conducted in a developing country. There analysis suggested that living in district with relatively high crime rate  was associated with a reduction in children's physical activity, and therefore gain in body mass index, but no change in childhood obesity risk.
+An et al. (2017) revealed a modest relationship between residential neighbourhood safety and weight-related behaviours and outcomes amongst children and adolescents through examing 22 studies, half of which were conducted in the USA, and one of which was conducted in a developing country. Their analysis suggested that living in districts with relatively high crime rate was associated with a reduction in the physical activity of children, and therefore a gain in body mass index, but no change in childhood obesity risk.
 
-At the same time, Sandy, Robert et al., (2013) work suggests that violent crimes alone seem to significantly increase children's weight. This seems to be due to the fact that the use of community areas is closely related to its safety. 
+At the same time, Sandy, Robert et al., (2013) work suggests that violent crimes alone seem to significantly increase the weight of children. This seems to be due to the fact that the use of community areas is closely related to its safety. 
 
-Therefore, we expect childhood obesity rate and crime rate have moderate positive correlation before actually conducting the analysis.
+Therefore, we expect childhood obesity rate and crime rate to have moderate positive correlation prior to conducting the analysis.
 
 ```{r, echo=FALSE, fig.cap="Figure 7. Correlation of childhood obesity and crime rate", fig.width=4, fig.height = 3}
 cor_plot("childhood_obesity")
@@ -332,7 +329,7 @@ Similar to the correlation between crime rate and life expectancy, crime rate an
 
 The analysis result confirms our expectation that as crime increases so does child obesity.
 
-####Incapacity Benefit
+#### Incapacity Benefit
 
 Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allowance claimant rate. Incapacity Benefit (IB) is paid to people who are incapable of working and meeting certain contribution conditions. Severe Disablement Allowance (SDA) is paid to those unable to work for 28 weeks in a row or more because of illness or disability.
 
@@ -340,20 +337,20 @@ Incapacity Benefit rate represents Incapacity Benefit or Severe Disablement Allo
 cor_plot("incapacity_benefit")
 ```
 
-Again crime rate and incapacity benefit rate have a moderate positive relationship, with a r equals to 0.3917 in 2013. The moderate correlation may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. 
+Again crime rate and incapacity benefit rate have a moderate positive relationship, with a r of 0.3917 in 2013. The moderate correlation may be explained by many extreme data values since the Pearson correlation coefficient is very sensitive to extreme data values. A single value that is very different from the other values in a data set can greatly change the value of the coefficient. 
 
-####Unemployment Rate
+#### Unemployment Rate
 Unemployment rate refers to the percentage of working-age residents claiming Jobseeker's Allowance (JSA) or National Insurance Credits. JSA is a benefit payable to unemployed people so the percentage can be used to estimate unemployment rate. 
 
-A study found significantly positive effects of unemployment on property crime rates using US state data (Raphael and Winter‐Ebmer, 2001). Although we do not have crime rate data of different types of crimes (e.g. property crime), we expect the relation of crime rate in general and unemployment rate to be positively correlated.
+A study found significantly positive effects of unemployment on property crime rates using US state data (Raphael and Winter‐Ebmer, 2001). Although the data used does not specify crime by type (e.g. property crime), we expect the relation of crime rate in general and unemployment rate to be positively correlated.
 
 ```{r, echo=FALSE, fig.cap="Figure 9. Correlation of umemployment rate and crime rate", fig.width=4, fig.height = 3}
 cor_plot("unemployment_rate")
 ```
 
-Our scatter plot shows moderate positive correlation between the two variables, which confirms our thinking. The wards with higher unemployment rates are likely to have higher crime rates. 
+The scatter plot shows moderate positive correlation between the two variables, which confirms our thinking. The wards with higher unemployment rates are likely to have higher crime rates. 
 
-####GCSE Scores
+#### GCSE Scores
 GCSE average point scores refers to GCSE and Equivalent point scores for pupils at the end of Key Stage 4 (KS4) in maintained schools. A study (Petrocelli and Petrocelli, 2005) has found the academic achievement is inversely correlated with adult criminality. We therefore expect wards with higher GCSE scores to have higher education well-being and lower level of crime.  
 
 ```{r, echo=FALSE, fig.cap="Figure 10. Correlation of GCSE scores and crime rate", fig.width=4, fig.height = 3}
@@ -362,22 +359,22 @@ cor_plot("GCSE_point")
 
 As we can see from the scatter, the relationship is consistent with our expectation. As GCSE score increases, crime decreases. 
 
-####Unauthorised Pupil Absence
-Unauthorised Absence is absence without permission from a teacher or other authorised representative of the school. The research of Lochner and Moretti (2004) shows that schooling significantly reduces criminal activity. We therefore expect to see a positive relationship between unauthorised pupil absence and crime rate. The scatter confirms our expectation.
+#### Unauthorised Pupil Absence
+Unauthorised Absence is pupil absence lacking permission given by a teacher or other authorised representative of the school. The research of Lochner and Moretti (2004) shows that schooling significantly reduces criminal activity. We therefore expect to see a positive relationship between unauthorised pupil absence and crime rate. The scatter plot confirms this expectation.
 
 ```{r, echo=FALSE, fig.cap="Figure 11. Correlation of unauthorised pupil absence and crime rate", fig.width=4, fig.height = 3}
 cor_plot("unauthorised_absence")
 ```
 
-####Dependent Children in Out-of-Work Household
-The measure of dependent children in out-of-work household represents the percentage of children living in out-of-work benefit claimant households. Children, whose one or both of their parents claim benefits, tend to live in impoverished environments. A study of the link between poverty and crime by Epstein provides evidence that children from poorer backgrounds are over-represented amongst violent offenders and are disproportionately selected into the juvenile justice system. We therefore expect to see a relation between the percentage of dependent children in out-of-work household and crime rates.
+#### Dependent Children in Out-of-Work Household
+The measure of dependent children in out-of-work household represents the percentage of children living in out-of-work benefit claimant households. Children, whose one or both of their parents claim benefits, tend to live in impoverished environments. A study of the link between poverty and crime by Epstein (2016) provides evidence that children from poorer backgrounds are over-represented amongst violent offenders and are disproportionately selected into the juvenile justice system. We therefore expect to see a positive relationship between the percentage of dependent children in out-of-work household and crime rates.
 
 ```{r, echo=FALSE, fig.cap="Figure 12. Correlation of dependent children in out-of-work household and crime rate", fig.width=4, fig.height = 3}
 # plot children varialbes
 cor_plot("dependent_children")
 ```
 
-A moderate positive correlation indicates that boroughs with higher numbers of  dependent children percentage tend to have higher crime rates.
+A moderate positive correlation indicates that boroughs with higher numbers of dependent children percentage tend to have higher crime rates.
 
 #### Public Transport Accessibility Scores	
 Studies on the relationship between access to public transport and crime rate have delivered different responses. General theory of crime states that higher land use intensity increases crime rates, due to the higher numbers of potential victims and potential criminals who are nearby each other (Block and Block, 2000). In London, areas more dense in population tend to have higher access to public transport (Theseira and Crooks, 2005). We therefore expect to see higher levels of crimes in districts with more access to public transport.
@@ -389,7 +386,7 @@ cor_plot("public_transport")
 In terms of public transport accessibility, there exists a clear moderate positive relationship. The correlation figure is 0.44. The more access to public transport, the higher the crime rates tend to be.
 
 ###Correlation Matrix
-Finally, we study the correlation between any two variables by constructing a correlation matrix as seen in the graph below. Green colours represent negative correlations while blue colours represents positive correlations. The stronger the correlation, the more space it will cover the space within the square box, and vice versa for weaker correlations.
+Finally, we study the correlation between any two variables by constructing a correlation matrix as seen in the graph below. Green colours represent negative correlations while blue colours represents positive correlations. The stronger the correlation, the more space it will cover within the square box, and vice versa for weaker correlations.
 
 ```{r, echo=FALSE, fig.cap="Figure 14. Correlation matrix", fig.width=5, fig.height = 5}
 cor_mat_df<-round(cor(select(crime_ward_2013, -Ward, -Borough, -home_access, -`well-being`, -deliberate_fires)),4)
@@ -399,13 +396,13 @@ col1 <- colorRampPalette(c('#CDDC39','#03A9F4'))
 corrplot(cor_mat_df,method = "square", order = "FPC", tl.col = "black", tl.cex = 0.75, sig.level = 0.05, insig = "pch", pch.cex = 1, col = col1(100))
 ```
 
-Before we get into regression, we notice that some of our independent variables (unemployment rate, dependent children and incapacity benefit) are highly correlated with each other, suggesting multicollinearity exists which can impact the prediction. Since percentage of dependent children is calculated based on out-of-work benefit claimant households and people who claim incapacity benefit are likely to be unemployment too, we will drop dependent children and incapacity benefit in our model. 
+From the correlation matrix, it is possible to see that some of the independent variables (unemployment rate, dependent children and incapacity benefit) are highly correlated with each other, suggesting multicollinearity exists which can impact the prediction. Since percentage of dependent children is calculated based on out-of-work benefit claimant households and people who claim incapacity benefit are likely to be unemployment too, we will not include dependent children and incapacity benefit in our model. 
 
 	
-## Linear Regression
-In this section, we will attempt to model crime rates on a series of independent variables relating to well-being in London. As previously discussed, measures of greenspace, subjective well-being and deliberate fires rates will be neglected in this model due to low levels of significant correlation. Variables capturing levels of incapacity benefits and of children in out-of-work households will also be excluded due to high levels of correlation with the other remaining independent variables. 
+## Regression
+In this section, we will attempt to model crime rates on a series of independent variables relating to well-being in London. As previously discussed, measures of greenspace, subjective well-being and deliberate fires rates will be neglected in this model due to low levels of significant correlation with crime. Variables capturing levels of incapacity benefits and of children in out-of-work households will also be excluded due to high levels of correlation with the other remaining independent variables. 
 
-The model created uses OLS or ordinary least squares to form a linear regression that minimizes the sum of the squared difference between the estimated and original values of the dependent variable.  As previously mentioned, the distribution of the crime rate in 2013 across wards was positively skewed. Because OLS assumes a normal distribution of the dependent variable, it will be transformed logarithmically to improve the distribution .
+The model created uses OLS or ordinary least squares to form a multi-variable regression that minimizes the sum of the squared difference between the estimated and original values of the dependent variable.  As previously mentioned, the distribution of the crime rate in 2013 across wards was positively skewed. Because OLS assumes a normal distribution of the dependent variable, it will be transformed logarithmically to improve the distribution.
 
 ```{r, echo=FALSE}
 # first and second regression
@@ -427,15 +424,17 @@ res_plot <- add_residuals(crime_ward_2013, log_lin1, "Residuals")
 ggplot(res_plot, aes(log(crime_ward_2013$crime_rate), Residuals)) +geom_point()+geom_hline(yintercept = 0, color = "red") + xlab("Log of crime rate")
 ```
 
-However, by plotting the residuals of this model, it is clear that they covary with the dependent variable. This entails the prevalence of bias and means that there exists factors that are assumed to be part of the error term that are correlated with crime rates. To improve this model, we would have to include these variables in the regression. This explains the R-squared of 37% as there are other common factors that are dually-correlated with the dependent and independent variables. Therefore it is clear that further research needs to be undertaken as we are unable to fully reject the null hypothesis.
+However, by plotting the residuals of this model, it is clear that they covary with the dependent variable. This entails the prevalence of bias and means that there exists factors that are assumed to be part of the error term that are correlated with crime rates. To improve this model, we would have to include these variables in the regression. This explains the R-squared of 37% as there are other common factors that are dually-correlated with the dependent and independent variables. Therefore, it is clear that further research needs to be undertaken as we are unable to fully reject the null hypothesis.
 
 ## Conclusion and Analysis
 
-Despite not being able to fully reject the null that crime rate cannot be entirely modelled on a series of well-being indicators, the model chosen does provide a compelling insight into possible reasons for varying crime rates across wards in London. The model shows a negative relationship between crime rate and life expectancy, suggesting that a healthier ward encourages less crime. Secondly the relationship between crime rates and unemployment rate is positive, meaning that a more unemployed population is more likely to commit crime, possibly attributed to increased antisocial behavior or need of alternative income. The variable capturing the level of unauthorized absence in schools, as expected has a positive relationship with crime. Public transport seems to have a positive relationship with crime. This seems contradictory as the well-being report assumes that access to public transport improves overall well-being of the ward. It may, however, be the case, that increased public transport increases human traffic and so the likelihood of crime increases. 
+Despite not being able to fully reject the null that crime rate cannot be entirely modelled on a series of well-being indicators, the model chosen does provide a compelling insight into possible reasons for varying crime rates across wards in London. The model shows a negative relationship between crime rate and life expectancy, suggesting that a healthier ward encourages less crime. Secondly, the relationship between crime rates and unemployment rate is positive, meaning that a more unemployed population is more likely to commit crime, possibly attributed to increased antisocial behavior or need of alternative income. The variable capturing the level of unauthorized absence in schools, as expected has a positive relationship with crime. Public transport seems to have a positive relationship with crime. This seems contradictory to the well-being report which assumes that access to public transport improves overall well-being of the ward. It may, however, be the case, that increased public transport increases human traffic and so the likelihood of crime increases. 
 
 However, as the residuals plot suggests, these variables, only tell part of the story. We suggest further analysis of crime rates that includes other variables. For example, the strength of the police force in wards may have a significant effect on the level of crime. Similarly, a larger proportion of the population who are young could cause more crime (Han, 2009). This research may prove more helpful in developing effective policies for reduction in crime rates. In order to compare fully the effect of preventative and punitive policies regarding the reduction of crime, it would be important to include analysis were levels of punishment vary. This type of analysis could help in explaining the ward-wide decrease in crime and ways that this could be promoted further.
 
-##References
+
+
+## References
 
 An, R., Yang, Y., Hoschke, A., Xue, H. and Wang, Y. (2017). Influence of neighbourhood safety on childhood obesity: a systematic review and meta-analysis of longitudinal studies. Obesity Reviews.
 
@@ -448,6 +447,9 @@ Crawford, A  and Evans, K (2017) Crime Prevention and Community Safety. In: Leib
 Epstein, R. (2016). The Link Between Poverty and Crime. Criminal Law and Justice Weekly. 180, 3.
 
 Fogg, A. (2014). What is crime? We can't measure it because we haven't defined it. The Guardian. [online] Available at: https://www.theguardian.com/commentisfree/2014/jan/16/what-is-crime-measure-definitions [Accessed 8 Oct. 2017].
+
+Greater London Authority (2013) London Ward Well-Being Scores. [online] Available at: <https://files.datapress.com/london/dataset/london-ward-well-being-scores/london-ward-well-being-probability-scores.xls [Accessed 11 Oct. 2017].
+
 
 Han, L. (2009). Economic Analyses of Crime in England and Wales. Ph.D. Department of Economics, Birmingham Business School, College of Social Science, The University of Birmingham.
 
@@ -468,4 +470,6 @@ Sandy, R., Tchernis, R., Wilson, J., Liu, G., Zhou, X., (2013). Effects of the B
 Theseira, M; Crooks, AT; (2005) The Relationship Between Population, Employment and Accessibility in London. In: Billen, R and Drummond, J and Forrest, D and Joao, E, (eds.) (Proceedings) GIS Research UK 13th Annual Conference. (pp. 169-174).
 
 Zhou, H., Deng, Z., Xia, Y. and Fu, M. (2016). A new sampling method in particle filter based on Pearson correlation coefficient. Neurocomputing, 216, pp.208-215.
+
+Link to git: https://github.com/stuart002/Group-Project
 
