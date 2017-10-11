@@ -1,5 +1,5 @@
 ---
-title: "Examining the relationship between crime rates and well-being in London"
+title: "Examining the Relationship Between Crime Rates and Well-being in London"
 author: "01221975, 01365564, 01381311, 01417146, 01419237, 01428264"
 date: "9/20/2017"
 output:
